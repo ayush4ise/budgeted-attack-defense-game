@@ -2,10 +2,20 @@
 Attacker's optimization probem, solved using KKT conditions
 """
 import sympy as sp
+from fractions import Fraction
 
 def prob_success(alpha, beta, Ti, Gi, Ai):
     "Probability of successful attack on target i"
     return (beta * Ti) / (beta * Ti + alpha * Gi + Ai)
+
+def decimal_to_rational(x, max_denominator=1000000):
+    if isinstance(x, str):
+        return sp.Rational(x)
+    elif isinstance(x, float):
+        frac = Fraction(x).limit_denominator(max_denominator)
+        return sp.Rational(frac.numerator, frac.denominator)
+    else:
+        return sp.Rational(x)
 
 def attacker_model(n, T_budget, alpha, beta, A, B, G_list):
     """
@@ -40,10 +50,13 @@ def attacker_model(n, T_budget, alpha, beta, A, B, G_list):
         A dictionary mapping SymPy symbols to their optimal values (attacker's allocations T_i,
         dual variables mu_i, and the Lagrange multiplier lambda_a), representing a KKT solution.
     """
+    A = decimal_to_rational(A)
+    G_list = [decimal_to_rational(i) for i in G_list]
+
     # Symbols
     T_list = sp.symbols(f'T1:{n+1}', real=True, nonnegative=True)
-    mu_t = sp.symbols(f'mu1:{n+1}', real=True, nonnegative=True)
-    lambda_t = sp.Symbol('lambda_a', real=True)
+    mu_t = sp.symbols(f'mut1:{n+1}', real=True, nonnegative=True)
+    lambda_t = sp.Symbol('lambda_t', real=True)
 
     # Objective function
     P_list = [prob_success(alpha, beta, Ti, Gi, A) for Ti, Gi in zip(T_list, G_list)]
@@ -69,7 +82,8 @@ def attacker_model(n, T_budget, alpha, beta, A, B, G_list):
     solution = sp.solve(kkt_system, list(T_list) + list(mu_t) + [lambda_t], dict=True)
     # The given conditions solve the model globally, hence one solution is obtained
 
-    return solution[0]
+    return {k: v.evalf() for k, v in solution[-1].items()}
+    # return solution
 
 
 # Parameters

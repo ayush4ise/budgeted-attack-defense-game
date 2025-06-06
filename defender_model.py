@@ -2,10 +2,20 @@
 Defender's optimization probem, solved using KKT conditions
 """
 import sympy as sp
+from fractions import Fraction
 
 def prob_success(alpha, beta, Ti, Gi, Ai):
     "Probability of successful attack on target i"
     return (beta * Ti) / (beta * Ti + alpha * Gi + Ai)
+
+def decimal_to_rational(x, max_denominator=1000000):
+    if isinstance(x, str):
+        return sp.Rational(x)
+    elif isinstance(x, float):
+        frac = Fraction(x).limit_denominator(max_denominator)
+        return sp.Rational(frac.numerator, frac.denominator)
+    else:
+        return sp.Rational(x)
 
 def defender_model(n, G_budget, alpha, beta, A, D, T_list):
     """
@@ -40,10 +50,13 @@ def defender_model(n, G_budget, alpha, beta, A, D, T_list):
         A dictionary mapping SymPy symbols to their optimal values (defender's allocations G_i,
         dual variables mu_i, and the Lagrange multiplier lambda_a), representing a KKT solution.
     """
+    A = decimal_to_rational(A)
+    T_list = [decimal_to_rational(i) for i in T_list]
+    
     # Symbols
-    G_list = sp.symbols(f'T1:{n+1}', real=True, nonnegative=True)
-    mu_g = sp.symbols(f'mu1:{n+1}', real=True, nonnegative=True)
-    lambda_g = sp.Symbol('lambda_a', real=True)
+    G_list = sp.symbols(f'G1:{n+1}', real=True, nonnegative=True)
+    mu_g = sp.symbols(f'mug1:{n+1}', real=True, nonnegative=True)
+    lambda_g = sp.Symbol('lambda_g', real=True)
 
     # Objective function
     P_list = [prob_success(alpha, beta, Ti, Gi, A) for Ti, Gi in zip(T_list, G_list)]
@@ -69,7 +82,8 @@ def defender_model(n, G_budget, alpha, beta, A, D, T_list):
     solution = sp.solve(kkt_system, list(G_list) + list(mu_g) + [lambda_g], dict=True)
     # The given conditions solve the model globally, hence one solution is obtained
 
-    return solution[0]
+    return {k: v.evalf() for k, v in solution[-1].items()}
+    # return solution
 
 
 # Parameters
