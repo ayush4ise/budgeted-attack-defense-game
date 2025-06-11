@@ -12,7 +12,7 @@
 
     Example: Allocations [0,5], [5,0]
 
-    The behaviour is unexpected, and isn't observed when the models are solved as a standard constrainted optimization problem.
+    The behaviour is unexpected, and isn't observed when the models are solved as a standard constrained optimization problem.
 
 - For implementing the game models, we face several challenges with standard Python libraries, as listed below:
 
