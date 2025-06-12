@@ -35,6 +35,10 @@
 
 - The results of the simultaneous and sequential games are consistent with the results of the paper [[1]](#1).
 
+### Date - 12 May 2025
+
+- An API library for the LINGO solver is available as `lingo_api` and can be used to interact with the LINGO solver from Python. The library is available at <https://pypi.org/project/lingo-api/>
+
 ## To Do
 
 - Run simulations for a 5-target game with different defender allocations to get
