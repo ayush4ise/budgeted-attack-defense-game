@@ -35,16 +35,18 @@
 
 - The results of the simultaneous and sequential games are consistent with the results of the paper [[1]](#1).
 
-### Date - 12 May 2025
+### Date - 13 May 2025
 
 - An API library for the LINGO solver is available as `lingo_api` and can be used to interact with the LINGO solver from Python. The library is available at <https://pypi.org/project/lingo-api/>
 
+- We create an attacker's optimization model using the LINGO solver, stored in `LINGO models/attacker_model.lng`. we use it for simulations using `simulation.py` to find the attacker's optimal allocation with respect to the defender's allocation.
+- We also obtain the defender's total losses for the given allocation.
+. The results of the simulation are stored in `results/attacker_best_simulation.csv`.
+
 ## To Do
 
-- Run simulations for a 5-target game with different defender allocations to get
-defender's optimal allocations.
-
-- Use the results to make an estimator function for the attacker's optimal allocation with respect to the defender's allocation.
+- Use the results to make an estimator function for the defender's total losses.
+- Defender's total losses (given optimal attacker allocation) are a function of the defender's allocation, attacker's allocation, and the defender's valuation of the targets.
 
 ## References
 

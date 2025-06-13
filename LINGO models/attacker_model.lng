@@ -1,0 +1,40 @@
+MODEL:
+
+DATA:
+N_TARGETS = @POINTER(1);
+ENDDATA
+
+SETS:
+TARGETS /1..N_TARGETS/: T, G, P, mu_t, B;
+ENDSETS
+
+! Parameters;
+DATA:
+alpha = @POINTER(2);
+beta = @POINTER(3);
+A = @POINTER(4);
+
+T_BUDGET = @POINTER(5);
+
+B = @POINTER(6);
+G = @POINTER(7);
+ENDDATA
+
+! Success probability;
+@FOR(TARGETS(i):
+    P(i) = beta * T(i) / (beta * T(i) + alpha * G(i) + A);
+);
+
+! Objective function (Defender's);
+[GAINS] MAX = @SUM(TARGETS(i) : B(i) * P(i));
+
+! Budget constraints;
+@SUM(TARGETS(i): T(i)) = T_budget;
+
+! Results;
+DATA:
+@POINTER(8) = T;
+@POINTER(9) = @STATUS();
+ENDDATA
+
+END
