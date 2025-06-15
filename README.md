@@ -47,6 +47,7 @@
 
 - Use the results to make an estimator function for the defender's total losses.
 - Defender's total losses (given optimal attacker allocation) are a function of the defender's allocation, attacker's allocation, and the defender's valuation of the targets.
+- Explore both online and offline settings for the defender's total losses estimator.
 
 ## References
 
