@@ -2,7 +2,7 @@
 
 ## Notes
 
-### Date - 11 May 2025
+### Date - 11 June 2025
 
 - We try to replicate the results of paper [[1]](#1) using Python. The results are in the notebook `implementation.ipynb`.
 
@@ -35,7 +35,7 @@
 
 - The results of the simultaneous and sequential games are consistent with the results of the paper [[1]](#1).
 
-### Date - 13 May 2025
+### Date - 13 June 2025
 
 - An API library for the LINGO solver is available as `lingo_api` and can be used to interact with the LINGO solver from Python. The library is available at <https://pypi.org/project/lingo-api/>
 
@@ -43,11 +43,15 @@
 - We also obtain the defender's total losses for the given allocation.
 . The results of the simulation are stored in `results/attacker_best_simulation.csv`.
 
+### Date - 25 June 2025
+
+- Python library `PyMC` is used to implement Bayesian Linear Regression, which is used to estimate the defender's total losses based on the defender's allocation.
+- The model is implemented in `estimation.ipynb` using the data from `results/attacker_best_simulation.csv`.
+
 ## To Do
 
 - Use the results to make an estimator function for the defender's total losses.
 - Defender's total losses (given optimal attacker allocation) are a function of the defender's allocation, attacker's allocation, and the defender's valuation of the targets.
-- Explore both online and offline settings for the defender's total losses estimator.
 
 ## References
 
