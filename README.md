@@ -46,12 +46,13 @@
 ### Date - 25 June 2025
 
 - Python library `PyMC` is used to implement Bayesian Linear Regression, which is used to estimate the defender's total losses based on the defender's allocation.
-- The model is implemented in `estimation.ipynb` using the data from `results/attacker_best_simulation.csv`.
+- The model is implemented in `bayesian_estimation.ipynb` using the data from `results/attacker_best_simulation.csv`.
+- Since, we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
 
 ## To Do
 
-- Use the results to make an estimator function for the defender's total losses.
-- Defender's total losses (given optimal attacker allocation) are a function of the defender's allocation, attacker's allocation, and the defender's valuation of the targets.
+- Use the results to make an estimator function for the defender's total losses, preferably a quadratic model.
+- Try to use the estimator functions in the iterative algorithm suggested.
 
 ## References
 
