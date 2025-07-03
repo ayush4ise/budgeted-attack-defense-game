@@ -39,9 +39,9 @@
 
 - An API library for the LINGO solver is available as `lingo_api` and can be used to interact with the LINGO solver from Python. The library is available at <https://pypi.org/project/lingo-api/>
 
-- We create an attacker's optimization model using the LINGO solver, stored in `LINGO models/attacker_model.lng`. we use it for simulations using `simulation.py` to find the attacker's optimal allocation with respect to the defender's allocation.
+- We create an attacker's optimization model using the LINGO solver, stored in `LINGO models/attacker_model.lng`. We use it for simulations using `dLoss_simulation.py` to find the attacker's optimal allocations with respect to the defender's allocations.
 - We also obtain the defender's total losses for the given allocation.
-. The results of the simulation are stored in `results/attacker_best_simulation.csv`.
+. The results of the simulation are stored in `results/dLoss_simulation_random20.csv`.
 
 ### Date - 25 June 2025
 
@@ -49,10 +49,16 @@
 - The model is implemented in `bayesian_estimation.ipynb` using the data from `results/attacker_best_simulation.csv`.
 - Since, we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
 
+### Date - 03 July 2025
+
+- We implement the defender's model using the LINGO solver, stored in `LINGO models/defender_model.lng`. We use it for simulations using `aGain_simulation.py` to find attacker's total gains with respect to the attacker's allocations, assuming the defender chooses the optimal allocation using the defender's model.
+- The results of the simulation are stored in `results/aGain_simulation_random100.csv`.
+
 ## To Do
 
 - Use the results to make an estimator function for the defender's total losses, preferably a quadratic model.
 - Try to use the estimator functions in the iterative algorithm suggested.
+- Try space filling designs/ factorial designs for the simulations.
 
 ## References
 

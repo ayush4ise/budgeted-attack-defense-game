@@ -5,7 +5,7 @@ N_TARGETS = @POINTER(1);
 ENDDATA
 
 SETS:
-TARGETS /1..N_TARGETS/: T, G, P, mu_t, B;
+TARGETS /1..N_TARGETS/: T, G, P, mu_g, D;
 ENDSETS
 
 ! Parameters;
@@ -14,10 +14,10 @@ alpha = @POINTER(2);
 beta = @POINTER(3);
 A = @POINTER(4);
 
-T_BUDGET = @POINTER(5);
+G_BUDGET = @POINTER(5);
 
-B = @POINTER(6);
-G = @POINTER(7);
+D = @POINTER(6);
+T = @POINTER(7);
 ENDDATA
 
 ! Success probability;
@@ -25,15 +25,15 @@ ENDDATA
     P(i) = beta * T(i) / (beta * T(i) + alpha * G(i) + A);
 );
 
-! Objective function (Attacker's);
-[GAINS] MAX = @SUM(TARGETS(i) : B(i) * P(i));
+! Objective function (Defender's);
+[LOSS] MAX = @SUM(TARGETS(i) : -D(i) * P(i));
 
 ! Budget constraints;
-@SUM(TARGETS(i): T(i)) = T_BUDGET;
+@SUM(TARGETS(i): G(i)) = G_BUDGET;
 
 ! Results;
 DATA:
-@POINTER(8) = T;
+@POINTER(8) = G;
 @POINTER(9) = @STATUS();
 ENDDATA
 

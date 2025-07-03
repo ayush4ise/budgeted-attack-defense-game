@@ -1,0 +1,134 @@
+  LINGO/WIN64 21.0.0.38 (22 Apr 2025)
+ 
+  LINDO API 15.0.6099.233 (Apr 20 2025 17:45:51)
+ 
+  Copyright (C) 2011-2023 LINDO Systems Inc. Licensed material,
+  all rights reserved. Copying except as authorized in license
+  agreement is prohibited.
+ 
+  License location: D:\LINGO64_21\lndlng21.lic
+ 
+  Eval Use Only
+ 
+  License expires:  4 Dec 2025
+ 
+  Licensed for commercial use.
+  Branch-and-bound solver enabled.
+  Nonlinear solver enabled.
+  Barrier solver enabled.
+  Global solver enabled.
+  Integer solver enabled.
+  Stochastic solver enabled.
+  Conic solver enabled.
+ 
+ 
+   Parameter        Old Value     New Value
+    ECHOIN             0             1
+ 
+:  MODEL:
+? MODEL:
+? DATA:
+? N_TARGETS = @POINTER(1);
+? ENDDATA
+? SETS:
+? TARGETS /1..N_TARGETS/: T, G, P, mu_g, D;
+? ENDSETS
+? ! Parameters;
+? DATA:
+? alpha = @POINTER(2);
+? beta = @POINTER(3);
+? A = @POINTER(4);
+? G_BUDGET = @POINTER(5);
+? D = @POINTER(6);
+? T = @POINTER(7);
+? ENDDATA
+? ! Success probability;
+? @FOR(TARGETS(i):
+?     P(i) = beta * T(i) / (beta * T(i) + alpha * G(i) + A);
+? );
+? ! Objective function (Defender's);
+? [LOSS] MAX = @SUM(TARGETS(i) : -D(i) * P(i));
+? ! Budget constraints;
+? @SUM(TARGETS(i): G(i)) = G_BUDGET;
+? ! Results;
+? DATA:
+? @POINTER(8) = G;
+? @POINTER(9) = @STATUS();
+? ENDDATA
+? END
+:  GO
+  Compiling model ...
+  Structural analysis, pass 1 ...
+  Scalarizing model ...
+  Generating nonzero matrix ...
+  Solving ...
+ 
+  LINGO/WIN64 21.0.38 (22 Apr 2025), LINDO API 15.0.6099.233
+ 
+  Licensee info: Eval Use Only
+  License expires:  4 DEC 2025
+ 
+  Local optimal solution found.
+  Objective value:                             -139.6547
+  Infeasibilities:                              0.000000
+  Total solver iterations:                            28
+  Elapsed runtime seconds:                          0.01
+ 
+  Running output operations ...
+ 
+  Model Class:                                       NLP
+ 
+  Total variables:                     15
+  Nonlinear variables:                  5
+  Integer variables:                    0
+ 
+  Total constraints:                    7
+  Nonlinear constraints:                5
+ 
+  Total nonzeros:                      20
+  Nonlinear nonzeros:                   5
+ 
+ 
+ 
+                                Variable           Value        Reduced Cost
+                               N_TARGETS        5.000000            0.000000
+                                   ALPHA        1.000000            0.000000
+                                    BETA        1.000000            0.000000
+                                       A       0.1000000            0.000000
+                                G_BUDGET        30.00000            0.000000
+                                   T( 1)       0.7212951            0.000000
+                                   T( 2)        1.209300            0.000000
+                                   T( 3)        1.066634            0.000000
+                                   T( 4)       0.6595899            0.000000
+                                   T( 5)        1.343181            0.000000
+                                   G( 1)        2.761252            0.000000
+                                   G( 2)        16.22359            0.000000
+                                   G( 3)        2.515327            0.000000
+                                   G( 4)        2.786535            0.000000
+                                   G( 5)        5.713298            0.000000
+                                   P( 1)       0.2013358            0.000000
+                                   P( 2)       0.6897323E-01        0.000000
+                                   P( 3)       0.2896918            0.000000
+                                   P( 4)       0.1860030            0.000000
+                                   P( 5)       0.1876875            0.000000
+                                MU_G( 1)        1.234568            0.000000
+                                MU_G( 2)        1.234568            0.000000
+                                MU_G( 3)        1.234568            0.000000
+                                MU_G( 4)        1.234568            0.000000
+                                MU_G( 5)        1.234568            0.000000
+                                   D( 1)        70.00000            0.000000
+                                   D( 2)        1000.000            0.000000
+                                   D( 3)        50.00000            0.000000
+                                   D( 4)        75.00000            0.000000
+                                   D( 5)        150.0000            0.000000
+ 
+                                     Row    Slack or Surplus      Dual Price
+                                       1        0.000000           -70.00000
+                                       2        0.000000           -1000.000
+                                       3        0.000000           -50.00000
+                                       4        0.000000           -75.00000
+                                       5        0.000000           -150.0000
+                                    LOSS       -139.6547            1.000000
+                                       7        0.000000            3.933934
+ 
+:  QUIT
