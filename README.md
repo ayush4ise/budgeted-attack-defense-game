@@ -4,7 +4,7 @@
 
 ### Date - 11 June 2025
 
-- We try to replicate the results of paper [[1]](#1) using Python. The results are in the notebook `implementation.ipynb`.
+- We try to replicate the results of paper [[1]](#1) using Python. The results are in the notebook `notebooks/implementation.ipynb`.
 
 - Python files `defender_model.py` and `attacker_model.py` contain the implementation of the defender's and attacker's model respectively, solved using KKT conditions, as described in the paper.
 
@@ -49,14 +49,15 @@
 - The model is implemented in `bayesian_estimation.ipynb` using the data from `results/attacker_best_simulation.csv`.
 - Since, we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
 
-### Date - 03 July 2025
+### Date - 04 July 2025
 
 - We implement the defender's model using the LINGO solver, stored in `LINGO models/defender_model.lng`. We use it for simulations using `aGain_simulation.py` to find attacker's total gains with respect to the attacker's allocations, assuming the defender chooses the optimal allocation using the defender's model.
 - The results of the simulation are stored in `results/aGain_simulation_random100.csv`.
+- We fit a quadratic regression model to the simulated data using `estimation.py` which will be used as a substitute to utility functions for both the attacker and defender in the iterative algorithm.
+- The model coefficients are saved in `models` folder.
 
 ## To Do
 
-- Use the results to make an estimator function for the defender's total losses, preferably a quadratic model.
 - Try to use the estimator functions in the iterative algorithm suggested.
 - Try space filling designs/ factorial designs for the simulations.
 
