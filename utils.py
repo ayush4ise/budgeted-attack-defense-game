@@ -3,7 +3,7 @@
 import lingo_api as lingo
 import numpy as np
 
-def prob_success(alpha, beta, Ti, Gi, Ai):
+def prob_success(Ti, Gi, alpha=1, beta=1, Ai=0.1):
     "Probability of successful attack on target i"
     return (beta * Ti) / (beta * Ti + alpha * Gi + Ai)
 

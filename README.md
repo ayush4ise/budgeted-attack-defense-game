@@ -56,10 +56,38 @@
 - We fit a quadratic regression model to the simulated data using `estimation.py` which will be used as a substitute to utility functions for both the attacker and defender in the iterative algorithm.
 - The model coefficients are saved in `models` folder.
 
+### Date - 09 July 2025
+
+- We use the estimated utility functions to find the optimal allocations for the attacker and defender using Gurobi, which is implemented in `utility_calculation.py`.
+- We also find the utility values using the contest success function formula (as used in the paper) for the optimal allocations.
+- The results are stored in `results/utility_comparison.xlsx`.
+
 ## To Do
 
 - Try to use the estimator functions in the iterative algorithm suggested.
 - Try space filling designs/ factorial designs for the simulations.
+
+## Results
+
+- Simultaneous game solution from LINGO model:
+  - Attacker Allocations, T = [0.614, 1.349, 2.685, 0.008, 0.345]
+  - Defender Allocations, G = [2.99, 19.303, 3.762, 0.328, 3.618]
+  - Attacker's Total Gains = 32.056
+  - Defender's Total Losses = 111.228
+- Sequential game solution from LINGO model:
+  - Attacker Allocations, T = [1.094, 0.385, 2.91, 0, 0.611]
+  - Defender Allocations, G = [1.71, 22.426, 2.638, 0, 3.226]
+  - Attacker's Total Gains = 38.08
+  - Defender's Total Losses = 92.215
+
+## Doubts/Suggestions
+
+- The iterative algorithm suggested doesn't work for this estimated utility approach, because there's no requirement for any previous iteration values to be used for updation.
+- Metaheuristic algorithms like Hill Climbing, Simulated Annealing, Genetic Algorithms, etc. can be used to find the optimal allocation for the attacker and defender.
+
+- We can use the defender's allocations as inputs for estimating the attacker's utility function, for the sequential game.
+
+- Effect of valuations on estimated utility functions (and results) can be studied.
 
 ## References
 

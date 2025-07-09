@@ -37,8 +37,8 @@ mu_ti = m.addVars(targets, vtype=GRB.CONTINUOUS, name="mu_ti")
 
 # Objective Function
 # P_list = [prob_success(alpha=alpha, beta=beta, Ti=Ti[i], Gi=Gi[i],Ai=A) for i in targets]
-P_list = [(beta * Ti) / (beta * Ti + alpha * Gi + A) for Ti,Gi in zip(Ti,Gi)]
-Z_g = sum(Di * Pi for Di, Pi in zip(B, P_list)) # Defender's objective (Upper level)
+P_list = [(beta * T) / (beta * T + alpha * G + A) for T,G in zip(Ti,Gi)]
+Z_g = sum(Di * Pi for Di, Pi in zip(D, P_list)) # Defender's objective (Upper level)
 
 m.setObjective(Z_g)
 
