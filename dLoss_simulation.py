@@ -5,6 +5,7 @@ based on simulated defender's allocations (attacker's optimization problem)
 """
 import numpy as np
 import pandas as pd
+from pyDOE3 import lhs
 from utils import attacker_lingo_model, prob_success
 
 np.random.seed(0) # Initial seed to generate 20 further seeds
@@ -26,8 +27,12 @@ D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
 # To store calculated values
 combined_values = []
 
-# Generate a (N_SAMPLES * N_TARGETS) size array with random numbers
-allocations = np.random.rand(N_SAMPLES, N_TARGETS)
+# # Generate a (N_SAMPLES * N_TARGETS) size array with random numbers
+# allocations = np.random.rand(N_SAMPLES, N_TARGETS)
+
+# Latin Hypercube Sampling (LHS) to generate a (N_SAMPLES * N_TARGETS) size array
+# Inspired from: https://pydoe3.readthedocs.io/en/latest/randomized.html#randomized
+allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin')
 
 for allocation in allocations:
     G = allocation
@@ -54,4 +59,5 @@ column_names = [f'G{i}' for i in range(1,N_TARGETS+1)] + [f'T_best{i}' for i in 
 
 # Create a dataframe
 df = pd.DataFrame(combined_values, columns=column_names)
-df.to_csv(f'results/dLoss_simulation_random{N_SAMPLES}.csv', index=False)
+# df.to_csv(f'results/dLoss_simulation_random{N_SAMPLES}.csv', index=False)
+df.to_csv(f'results/dLoss_simulation_lhs{N_SAMPLES}.csv', index=False)

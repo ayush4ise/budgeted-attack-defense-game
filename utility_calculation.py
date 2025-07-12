@@ -105,8 +105,10 @@ if __name__ == '__main__':
     D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
 
     # Defining utility functions for both attacker and defender
-    attacker_utility = partial(utility_function, model_path='models/aGain_model_random100.json')
-    defender_utility = partial(utility_function, model_path='models/dLoss_model_random100.json')
+    # attacker_utility = partial(utility_function, model_path='models/aGain_model_random100.json')
+    # defender_utility = partial(utility_function, model_path='models/dLoss_model_random100.json')
+    attacker_utility = partial(utility_function, model_path='models/aGain_model_lhs100.json')
+    defender_utility = partial(utility_function, model_path='models/dLoss_model_lhs100.json')
 
     # Attacker allocations
     T_list = optimize_utility(N=num_targets, utility=attacker_utility, budget=T_BUDGET, goal='MAXIMIZE')

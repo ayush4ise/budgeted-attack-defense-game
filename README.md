@@ -60,12 +60,21 @@
 
 - We use the estimated utility functions to find the optimal allocations for the attacker and defender using Gurobi, which is implemented in `utility_calculation.py`.
 - We also find the utility values using the contest success function formula (as used in the paper) for the optimal allocations.
-- The results are stored in `results/utility_comparison.xlsx`.
+- The results are stored in `results/utility_comparison_random100.xlsx`.
+
+### Date - 12 July 2025
+
+- Python library `PyDOE3` is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in `aGain_simulation.py` and `dLoss_simulation.py`. The results are stored in `results/aGain_simulation_lhs100.csv` and `results/dLoss_simulation_lhs100.csv` respectively.
+
+- We fit quadratic regression models to this simulated data using `estimation.py`. The models coefficients are saved in `models` folder as `aGain_model_lhs100.json` and `dLoss_model_lhs100.json`.
+
+- We use these estimated utility functions to carry out utility calculation using `utility_calculation.py`. The results are stored in `results/utility_comparison_lhs100.xlsx`.
 
 ## To Do
 
 - Try to use the estimator functions in the iterative algorithm suggested.
 - Try space filling designs/ factorial designs for the simulations.
+- Figure out what went wrong with LHS samples and the results obtained from the simulations.
 
 ## Results
 
@@ -83,6 +92,7 @@
 ## Doubts/Suggestions
 
 - The iterative algorithm suggested doesn't work for this estimated utility approach, because there's no requirement for any previous iteration values to be used for updation.
+
 - Metaheuristic algorithms like Hill Climbing, Simulated Annealing, Genetic Algorithms, etc. can be used to find the optimal allocation for the attacker and defender.
 
 - We can use the defender's allocations as inputs for estimating the attacker's utility function, for the sequential game.

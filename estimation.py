@@ -8,16 +8,21 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-filepath = "results/aGain_simulation_random100.csv"
-savepath = "models/aGain_model_random100.json"
+# filepath = "results/aGain_simulation_random100.csv"
+# savepath = "models/aGain_model_random100.json"
+filepath = "results/dLoss_simulation_lhs100.csv"
+savepath = "models/dLoss_model_lhs100.json"
 data = pd.read_csv(filepath)
+
+# T - Attacker allocations, Z_T - Attacker Gains
+# G - Defender allocations, Z_G - Defender Losses
 
 # Defining X and y for regression
 # Degree 1 features
-# X_1 = np.array(data[['G1','G2','G3','G4','G5']])
-# y = data['Z_G']
-X_1 = np.array(data[['T1','T2','T3','T4','T5']])
-y = data['Z_T']
+X_1 = np.array(data[['G1','G2','G3','G4','G5']])
+y = data['Z_G']
+# X_1 = np.array(data[['T1','T2','T3','T4','T5']])
+# y = data['Z_T']
 
 # Get quadratic features
 X_2 = X_1**2
