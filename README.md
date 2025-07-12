@@ -4,9 +4,9 @@
 
 ### Date - 11 June 2025
 
-- We try to replicate the results of paper [[1]](#1) using Python. The results are in the notebook `notebooks/implementation.ipynb`.
+- We try to replicate the results of paper [[1]](#1) using Python. The results are in the notebook [`notebooks/implementation.ipynb`](notebooks/implementation.ipynb).
 
-- Python files `defender_model.py` and `attacker_model.py` contain the implementation of the defender's and attacker's model respectively, solved using KKT conditions, as described in the paper.
+- Python files [`defender_model.py`](defender_model.py) and [`attacker_model.py`](attacker_model.py) contain the implementation of the defender's and attacker's model respectively, solved using KKT conditions, as described in the paper.
 
 - For the individual attacker's and defenser's problem, the KKT conditions provide inverted results for the edge cases.
 
@@ -38,37 +38,36 @@
 ### Date - 13 June 2025
 
 - An API library for the LINGO solver is available as `lingo_api` and can be used to interact with the LINGO solver from Python. The library is available at <https://pypi.org/project/lingo-api/>
-
-- We create an attacker's optimization model using the LINGO solver, stored in `LINGO models/attacker_model.lng`. We use it for simulations using `dLoss_simulation.py` to find the attacker's optimal allocations with respect to the defender's allocations.
+- We create an attacker's optimization model using the LINGO solver, stored in [`LINGO models/attacker_model.lng`](LINGO%20models/attacker_model.lng). We use it for simulations using [`dLoss_simulation.py`](dLoss_simulation.py) to find the attacker's optimal allocations with respect to the defender's allocations.
 - We also obtain the defender's total losses for the given allocation.
-. The results of the simulation are stored in `data/dLoss_simulation_random20.csv`.
+- The results of the simulation are stored in [`data/dLoss_simulation_random20.csv`](data/dLoss_simulation_random20.csv).
 
 ### Date - 25 June 2025
 
 - Python library `PyMC` is used to implement Bayesian Linear Regression, which is used to estimate the defender's total losses based on the defender's allocation.
-- The model is implemented in `bayesian_estimation.ipynb` using the data from `data/dLoss_simulation_random20.csv`.
-- Since, we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
+- The model is implemented in [`bayesian_estimation.ipynb`](bayesian_estimation.ipynb) using the data from [`data/dLoss_simulation_random20.csv`](data/dLoss_simulation_random20.csv).
+- Since we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
 
 ### Date - 04 July 2025
 
-- We implement the defender's model using the LINGO solver, stored in `LINGO models/defender_model.lng`. We use it for simulations using `aGain_simulation.py` to find attacker's total gains with respect to the attacker's allocations, assuming the defender chooses the optimal allocation using the defender's model.
-- The results of the simulation are stored in `data/aGain_simulation_random100.csv`.
-- We fit a quadratic regression model to the simulated data using `estimation.py` which will be used as a substitute to utility functions for both the attacker and defender in the iterative algorithm.
-- The model coefficients are saved in `models` folder.
+- We implement the defender's model using the LINGO solver, stored in [`LINGO models/defender_model.lng`](LINGO%20models/defender_model.lng). We use it for simulations using [`aGain_simulation.py`](aGain_simulation.py) to find the attacker's total gains with respect to the attacker's allocations, assuming the defender chooses the optimal allocation using the defender's model.
+- The results of the simulation are stored in [`data/aGain_simulation_random100.csv`](data/aGain_simulation_random100.csv).
+- We fit a quadratic regression model to the simulated data using [`estimation.py`](estimation.py), which will be used as a substitute for utility functions for both the attacker and defender in the iterative algorithm.
+- The model coefficients are saved in the [`models`](models) folder.
 
 ### Date - 09 July 2025
 
-- We use the estimated utility functions to find the optimal allocations for the attacker and defender using Gurobi, which is implemented in `utility_calculation.py`.
+- We use the estimated utility functions to find the optimal allocations for the attacker and defender using Gurobi, which is implemented in [`utility_calculation.py`](utility_calculation.py).
 - We also find the utility values using the contest success function formula (as used in the paper) for the optimal allocations.
-- The results are stored in `results/utility_comparison.xlsx`.
+- The results are stored in [`results/utility_comparison.xlsx`](results/utility_comparison.xlsx).
 
 ### Date - 12 July 2025
 
-- Python library `PyDOE3` is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in `aGain_simulation.py` and `dLoss_simulation.py`. The results are stored in `data/aGain_simulation_lhs100.csv` and `data/dLoss_simulation_lhs100.csv` respectively.
+- Python library `PyDOE3` is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in [`aGain_simulation.py`](aGain_simulation.py) and [`dLoss_simulation.py`](dLoss_simulation.py). The results are stored in [`data/aGain_simulation_lhs100.csv`](data/aGain_simulation_lhs100.csv) and [`data/dLoss_simulation_lhs100.csv`](data/dLoss_simulation_lhs100.csv), respectively.
 
-- We fit quadratic regression models to this simulated data using `estimation.py`. The models coefficients are saved in `models` folder as `aGain_model_lhs100.json` and `dLoss_model_lhs100.json`.
+- We fit quadratic regression models to this simulated data using [`estimation.py`](estimation.py). The model coefficients are saved in the [`models`](models) folder as [`aGain_model_lhs100.json`](models/aGain_model_lhs100.json) and [`dLoss_model_lhs100.json`](models/dLoss_model_lhs100.json).
 
-- We use these estimated utility functions to carry out utility calculation using `utility_calculation.py`. The results are updated in `results/utility_comparison.xlsx`.
+- We use these estimated utility functions to carry out utility calculation using [`utility_calculation.py`](utility_calculation.py). The results are updated in [`results/utility_comparison.xlsx`](results/utility_comparison.xlsx).
 
 ## To Do
 
