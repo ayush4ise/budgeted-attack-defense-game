@@ -41,18 +41,18 @@
 
 - We create an attacker's optimization model using the LINGO solver, stored in `LINGO models/attacker_model.lng`. We use it for simulations using `dLoss_simulation.py` to find the attacker's optimal allocations with respect to the defender's allocations.
 - We also obtain the defender's total losses for the given allocation.
-. The results of the simulation are stored in `results/dLoss_simulation_random20.csv`.
+. The results of the simulation are stored in `data/dLoss_simulation_random20.csv`.
 
 ### Date - 25 June 2025
 
 - Python library `PyMC` is used to implement Bayesian Linear Regression, which is used to estimate the defender's total losses based on the defender's allocation.
-- The model is implemented in `bayesian_estimation.ipynb` using the data from `results/attacker_best_simulation.csv`.
+- The model is implemented in `bayesian_estimation.ipynb` using the data from `data/dLoss_simulation_random20.csv`.
 - Since, we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
 
 ### Date - 04 July 2025
 
 - We implement the defender's model using the LINGO solver, stored in `LINGO models/defender_model.lng`. We use it for simulations using `aGain_simulation.py` to find attacker's total gains with respect to the attacker's allocations, assuming the defender chooses the optimal allocation using the defender's model.
-- The results of the simulation are stored in `results/aGain_simulation_random100.csv`.
+- The results of the simulation are stored in `data/aGain_simulation_random100.csv`.
 - We fit a quadratic regression model to the simulated data using `estimation.py` which will be used as a substitute to utility functions for both the attacker and defender in the iterative algorithm.
 - The model coefficients are saved in `models` folder.
 
@@ -60,21 +60,20 @@
 
 - We use the estimated utility functions to find the optimal allocations for the attacker and defender using Gurobi, which is implemented in `utility_calculation.py`.
 - We also find the utility values using the contest success function formula (as used in the paper) for the optimal allocations.
-- The results are stored in `results/utility_comparison_random100.xlsx`.
+- The results are stored in `results/utility_comparison.xlsx`.
 
 ### Date - 12 July 2025
 
-- Python library `PyDOE3` is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in `aGain_simulation.py` and `dLoss_simulation.py`. The results are stored in `results/aGain_simulation_lhs100.csv` and `results/dLoss_simulation_lhs100.csv` respectively.
+- Python library `PyDOE3` is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in `aGain_simulation.py` and `dLoss_simulation.py`. The results are stored in `data/aGain_simulation_lhs100.csv` and `data/dLoss_simulation_lhs100.csv` respectively.
 
 - We fit quadratic regression models to this simulated data using `estimation.py`. The models coefficients are saved in `models` folder as `aGain_model_lhs100.json` and `dLoss_model_lhs100.json`.
 
-- We use these estimated utility functions to carry out utility calculation using `utility_calculation.py`. The results are stored in `results/utility_comparison_lhs100.xlsx`.
+- We use these estimated utility functions to carry out utility calculation using `utility_calculation.py`. The results are updated in `results/utility_comparison.xlsx`.
 
 ## To Do
 
 - Try to use the estimator functions in the iterative algorithm suggested.
 - Try space filling designs/ factorial designs for the simulations.
-- Figure out what went wrong with LHS samples and the results obtained from the simulations.
 
 ## Results
 

@@ -8,7 +8,7 @@ import pandas as pd
 from pyDOE3 import lhs
 from utils import defender_lingo_model, prob_success
 
-np.random.seed(0) # Initial seed to generate 20 further seeds
+np.random.seed(0) # Initial seed
 
 # Defining parameters
 N_TARGETS = 5 # For simulation purposes
@@ -32,7 +32,7 @@ combined_values = []
 
 # Latin Hypercube Sampling (LHS) to generate a (N_SAMPLES * N_TARGETS) size array
 # Inspired from: https://pydoe3.readthedocs.io/en/latest/randomized.html#randomized
-allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin')
+allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin', random_state=0)
 
 for allocation in allocations:
     T = allocation
@@ -49,7 +49,7 @@ for allocation in allocations:
         T_list=T
     )
 
-    utility = np.dot(B, [prob_success(alpha,beta,Ti,Gi,A) for Ti,Gi in zip(T,G)])
+    utility = np.dot(B, [prob_success(Ti=Ti,Gi=Gi) for Ti,Gi in zip(T,G)])
     print('Z_t:', utility)
 
     combined_values.append(list(T) + list(G) + [utility])
@@ -59,5 +59,5 @@ column_names = [f'T{i}' for i in range(1,N_TARGETS+1)] + [f'G_best{i}' for i in 
 
 # Create a dataframe
 df = pd.DataFrame(combined_values, columns=column_names)
-# df.to_csv(f'results/aGain_simulation_random{N_SAMPLES}.csv', index=False)
-df.to_csv(f'results/aGain_simulation_lhs{N_SAMPLES}.csv', index=False)
+# df.to_csv(f'data/aGain_simulation_random{N_SAMPLES}.csv', index=False)
+df.to_csv(f'data/aGain_simulation_lhs{N_SAMPLES}.csv', index=False)

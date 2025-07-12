@@ -32,7 +32,7 @@ combined_values = []
 
 # Latin Hypercube Sampling (LHS) to generate a (N_SAMPLES * N_TARGETS) size array
 # Inspired from: https://pydoe3.readthedocs.io/en/latest/randomized.html#randomized
-allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin')
+allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin', random_state=0)
 
 for allocation in allocations:
     G = allocation
@@ -49,7 +49,7 @@ for allocation in allocations:
         G_list=G
     )
 
-    utility = np.dot(D, [prob_success(alpha,beta,Ti,Gi,A) for Ti,Gi in zip(T,G)])
+    utility = np.dot(D, [prob_success(Ti=Ti,Gi=Gi) for Ti,Gi in zip(T,G)])
     print('Z_g:', utility)
 
     combined_values.append(list(G) + list(T) + [utility])
@@ -59,5 +59,5 @@ column_names = [f'G{i}' for i in range(1,N_TARGETS+1)] + [f'T_best{i}' for i in 
 
 # Create a dataframe
 df = pd.DataFrame(combined_values, columns=column_names)
-# df.to_csv(f'results/dLoss_simulation_random{N_SAMPLES}.csv', index=False)
-df.to_csv(f'results/dLoss_simulation_lhs{N_SAMPLES}.csv', index=False)
+# df.to_csv(f'data/dLoss_simulation_random{N_SAMPLES}.csv', index=False)
+df.to_csv(f'data/dLoss_simulation_lhs{N_SAMPLES}.csv', index=False)
