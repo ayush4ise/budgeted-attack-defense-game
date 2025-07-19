@@ -61,33 +61,37 @@ def optimize_utility(N, utility, budget, goal):
     targets = list(range(N))
 
     # Create a new model
-    m = gp.Model("estimated_utility")
+    # m = gp.Model("estimated_utility")
+    with gp.Env(empty=True) as env:
+        env.setParam('OutputFlag', 0)
+        env.start()
+        with gp.Model(env=env) as m:
 
-    # Variables
-    allocations = m.addVars(targets, vtype=GRB.CONTINUOUS, name="allocations")
+            # Variables
+            allocations = m.addVars(targets, vtype=GRB.CONTINUOUS, name="allocations")
 
-    # Objective function
-    Z = utility(allocations)
+            # Objective function
+            Z = utility(allocations)
 
-    if goal == 'MAXIMIZE':
-        m.setObjective(Z, GRB.MAXIMIZE)
-    elif goal == 'MINIMIZE':
-        m.setObjective(Z, GRB.MINIMIZE)
+            if goal == 'MAXIMIZE':
+                m.setObjective(Z, GRB.MAXIMIZE)
+            elif goal == 'MINIMIZE':
+                m.setObjective(Z, GRB.MINIMIZE)
 
-    # Constraints
-    # Budget constraint of entity
-    m.addConstr(allocations.sum() - budget == 0, name="budget")
+            # Constraints
+            # Budget constraint of entity
+            m.addConstr(allocations.sum() - budget == 0, name="budget")
 
-    # Optimize the model
-    m.optimize()
+            # Optimize the model
+            m.optimize()
 
-    # Output the solver status
-    if m.status == GRB.OPTIMAL:
-        print("Optimal solution found.")
-    else:
-        print(f"Optimization ended with status {m.status}.")
+            # Output the solver status
+            if m.status == GRB.OPTIMAL:
+                print("Optimal solution found.")
+            else:
+                print(f"Optimization ended with status {m.status}.")
 
-    return [v.x for v in m.getVars()]
+            return np.array([v.x for v in m.getVars()])
 
 
 if __name__ == '__main__':

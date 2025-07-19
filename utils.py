@@ -50,7 +50,7 @@ def attacker_lingo_model(n_targets, alpha, beta, A, t_budget, B_list, G_list):
 
     # Using a model in LINGO to maintain uniformity 
     LINGO_SCRIPT = "LINGO models/attacker_model.lng"
-    LOG_PATH = "logs/attacker.log"
+    # LOG_PATH = "logs/attacker.log"
 
     # Defining variables to capture the results
     T = np.zeros(n_targets)
@@ -59,9 +59,9 @@ def attacker_lingo_model(n_targets, alpha, beta, A, t_budget, B_list, G_list):
     STATUS = -1
 
     # Create a model object
-    model = lingo.Model(LINGO_SCRIPT)
+    model = lingo.Model(LINGO_SCRIPT, logFile=None)
 
-    model.set_logFile(LOG_PATH)
+    # model.set_logFile(LOG_PATH)
 
     # Set all pointers in the order that they appear in attacker_model.lng
     model.set_pointer("Pointer1",n_targets,lingo.PARAM)

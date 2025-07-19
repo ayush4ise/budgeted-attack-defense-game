@@ -44,7 +44,7 @@
 
 ### Date - 25 June 2025
 
-- Python library `PyMC` is used to implement Bayesian Linear Regression, which is used to estimate the defender's total losses based on the defender's allocation.
+- Python library [`PyMC`](https://www.pymc.io/welcome.html) is used to implement Bayesian Linear Regression, which is used to estimate the defender's total losses based on the defender's allocation.
 - The model is implemented in [`bayesian_estimation.ipynb`](bayesian_estimation.ipynb) using the data from [`data/dLoss_simulation_random20.csv`](data/dLoss_simulation_random20.csv).
 - Since we don't know the priors for the model, we cannot use the Bayesian model to estimate the defender's total losses.
 
@@ -63,16 +63,40 @@
 
 ### Date - 12 July 2025
 
-- Python library `PyDOE3` is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in [`aGain_simulation.py`](aGain_simulation.py) and [`dLoss_simulation.py`](dLoss_simulation.py). The results are stored in [`data/aGain_simulation_lhs100.csv`](data/aGain_simulation_lhs100.csv) and [`data/dLoss_simulation_lhs100.csv`](data/dLoss_simulation_lhs100.csv), respectively.
+- Python library [`PyDOE3`](https://pydoe3.readthedocs.io/en/latest/) is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in [`aGain_simulation.py`](aGain_simulation.py) and [`dLoss_simulation.py`](dLoss_simulation.py). The results are stored in [`data/aGain_simulation_lhs100.csv`](data/aGain_simulation_lhs100.csv) and [`data/dLoss_simulation_lhs100.csv`](data/dLoss_simulation_lhs100.csv), respectively.
 
 - We fit quadratic regression models to this simulated data using [`estimation.py`](estimation.py). The model coefficients are saved in the [`models`](models) folder as [`aGain_model_lhs100.json`](models/aGain_model_lhs100.json) and [`dLoss_model_lhs100.json`](models/dLoss_model_lhs100.json).
 
 - We use these estimated utility functions to carry out utility calculation using [`utility_calculation.py`](utility_calculation.py). The results are updated in [`results/utility_comparison.xlsx`](results/utility_comparison.xlsx).
 
+### Date - 19 July 2025
+
+- We implement an iterative algorithm to find optimal allocations for the attacker and defender. The algorithm is implemented in [`algorithm.py`](algorithm1.py). Explanation of the algorithn is provided [below](#algorithm-1---iterative-model-updation).
+
+- The updated dataset is stored in [`data/dLoss_updated_lhs100.csv`](data/dLoss_updated_lhs100.csv).
+
+- The model coefficients calculated at each iteration are saved in the [`models/itermodels`](models/itermodels) folder. Logs of the iterations are saved in [`logs/algorithm1.log`](logs/algorithm1.log).
+
+## Algorithms
+
+### Algorithm 1 - Iterative Model Updation
+
+```markdown
+1. Initialize attacker and defender allocations a, d
+2. While not converged:
+3.         d* = argmin defender's estimated utility function
+4.         a* = argmax attacker's actual utility function
+5.         Calculate actual loss: y_new = dLoss(d*, a*)
+6.         Add y_new to dLoss simulation dataset
+7.         Update defender's model with new data
+8. Return (a*, d*)
+```
+
 ## To Do
 
-- Try to use the estimator functions in the iterative algorithm suggested.
-- Try space filling designs/ factorial designs for the simulations.
+- Read gradient methods from the RL textbook.
+- Better convergence criteria for the iterative algorithm.
+- Compare results with random and greedy allocation methods.
 
 ## Results
 
@@ -88,12 +112,6 @@
   - Defender's Total Losses = 92.215
 
 ## Doubts/Suggestions
-
-- The iterative algorithm suggested doesn't work for this estimated utility approach, because there's no requirement for any previous iteration values to be used for updation.
-
-- Metaheuristic algorithms like Hill Climbing, Simulated Annealing, Genetic Algorithms, etc. can be used to find the optimal allocation for the attacker and defender.
-
-- We can use the defender's allocations as inputs for estimating the attacker's utility function, for the sequential game.
 
 - Effect of valuations on estimated utility functions (and results) can be studied.
 
