@@ -29,10 +29,11 @@ D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
 MAX_ITERS = 30
 ITERATION = 1
 
-# Initialize attacker's and defender's allocations
-# Intialized as equal allocatins to all targets
-A0 = np.ones(NUM_TARGETS) * A_BUDGET/NUM_TARGETS
-D0 = np.ones(NUM_TARGETS) * D_BUDGET/NUM_TARGETS
+# Redundant
+# # Initialize attacker's and defender's allocations
+# # Intialized as equal allocatins to all targets
+# A0 = np.ones(NUM_TARGETS) * A_BUDGET/NUM_TARGETS
+# D0 = np.ones(NUM_TARGETS) * D_BUDGET/NUM_TARGETS
 
 # Initial defender's utility function
 DMODEL_PATH = 'models/dLoss_model_lhs100.json'
@@ -58,9 +59,13 @@ while ITERATION < MAX_ITERS:
                                 t_budget=A_BUDGET, B_list=B, G_list=D_star)
     logging.info('A*: %s', A_star)
 
-    # Get y_new by getting the defender's loss using D_star
+    # Get y_new by getting the defender's loss using D_star, A_star
     y_new = np.dot(D, prob_success(Ti=A_star, Gi=D_star))
     logging.info('y_new: %s', y_new)
+
+    # Also, calculate attacker's gains using D_star, A_star
+    gains = np.dot(B, prob_success(Ti=A_star, Gi=D_star))
+    logging.info('Gains: %s', gains)
 
     # Update dataset and save it to a CSV file
     loss_data.loc[len(loss_data)] = np.hstack((D_star, A_star, [y_new])).ravel()

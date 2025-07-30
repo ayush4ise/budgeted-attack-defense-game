@@ -77,12 +77,17 @@
 
 - The model coefficients calculated at each iteration are saved in the [`models/itermodels`](models/itermodels) folder. Logs of the iterations are saved in [`logs/algorithm1.log`](logs/algorithm1.log).
 
+### Date - 30 July 2025
+
+- We implement both simultaneous and sequential game models using the LINGO solver. The models are stored in [`LINGO models/simultaneous_game.lng`](LINGO%20models/simultaneous_game.lng) and [`LINGO models/sequential_game.lng`](LINGO%20models/sequential_game.lng).
+- The function `game_lingo_model` in ['utils.py'](utils.py) is used to run the LINGO models and get the results.
+
 ## Algorithms
 
 ### Algorithm 1 - Iterative Model Updation
 
 ```markdown
-1. Initialize attacker and defender allocations a, d
+1. [Redundant] Initialize attacker and defender allocations a, d
 2. While not converged:
 3.         d* = argmin defender's estimated utility function
 4.         a* = argmax attacker's actual utility function
@@ -94,9 +99,11 @@
 
 ## To Do
 
-- Read gradient methods from the RL textbook.
+- Try different estimators, preferably differentiable ones, so that the solver can optimize the model. [SVM, ANN maybe, etc.]
+- Make plots, by varying A, B, alpha values in the probability success function. Pay attention to files where these values were fixed and change that.
+- Also make greedy and random allocation methods, and compare results with the iterative algorithm.
+- Do train-test splits for the regression models.
 - Better convergence criteria for the iterative algorithm.
-- Compare results with random and greedy allocation methods.
 
 ## Results
 
@@ -114,6 +121,7 @@
 ## Doubts/Suggestions
 
 - Effect of valuations on estimated utility functions (and results) can be studied.
+- Effect of budget too can be studied.
 
 ## References
 
