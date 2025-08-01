@@ -260,7 +260,13 @@ def game_lingo_model(game_type, n_targets, alpha, beta, A, b_list, d_list, t_bud
     else:
         print("\nSolution is non-optimal\n")
 
+    # Calculate losses and gains
+    losses = np.dot(d_list, prob_success(Ti=T, Gi=G, alpha=alpha, beta=beta, Ai=A))
+    gains = np.dot(b_list, prob_success(Ti=T, Gi=G, alpha=alpha, beta=beta, Ai=A))
+
     return {
         "Defender's allocations" : G,
-        "Attacker's allocations" : T
+        "Attacker's allocations" : T,
+        "Defender's Losses"      : losses,
+        "Attacker's Gains"       : gains
     }

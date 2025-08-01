@@ -21,7 +21,7 @@ def defender_model(n, G_budget, alpha, beta, A, D, T_list):
     """
     Function to solve defender's optimization model and return allocation values, G
 
-    Parameters:
+    Parameters
     -----------
     n : int
         Number of targets.
@@ -44,7 +44,7 @@ def defender_model(n, G_budget, alpha, beta, A, D, T_list):
     T_list : list of floats
         Attacker's resource allocation to each target. Length must be n.
 
-    Returns:
+    Returns
     --------
     dict
         A dictionary mapping SymPy symbols to their optimal values (defender's allocations G_i,

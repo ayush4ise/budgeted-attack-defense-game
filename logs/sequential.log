@@ -1,0 +1,224 @@
+  LINGO/WIN64 21.0.0.38 (22 Apr 2025)
+ 
+  LINDO API 15.0.6099.233 (Apr 20 2025 17:45:51)
+ 
+  Copyright (C) 2011-2023 LINDO Systems Inc. Licensed material,
+  all rights reserved. Copying except as authorized in license
+  agreement is prohibited.
+ 
+  License location: D:\LINGO64_21\lndlng21.lic
+ 
+  Eval Use Only
+ 
+  License expires:  4 Dec 2025
+ 
+  Licensed for commercial use.
+  Branch-and-bound solver enabled.
+  Nonlinear solver enabled.
+  Barrier solver enabled.
+  Global solver enabled.
+  Integer solver enabled.
+  Stochastic solver enabled.
+  Conic solver enabled.
+ 
+ 
+   Parameter        Old Value     New Value
+    ECHOIN             0             1
+ 
+:  MODEL:
+? MODEL:
+? DATA:
+? N_TARGETS = @POINTER(1);
+? ENDDATA
+? SETS:
+? TARGETS /1..N_TARGETS/: T, G, P, mu_t, mu_g, dZdT, dZdG, B, D;
+? ENDSETS
+? ! Parameters;
+? DATA:
+? alpha = @POINTER(2);
+? beta = @POINTER(3);
+? A = @POINTER(4);
+? ! Attacker and defender valuations;
+? B = @POINTER(5);
+? D = @POINTER(6);
+? ! Attacker and defender budgets;
+? T_budget = @POINTER(7);
+? G_budget = @POINTER(8);
+? ENDDATA
+? ! Success probability;
+? @FOR(TARGETS(i):
+?     P(i) = beta * T(i) / (beta * T(i) + alpha * G(i) + A);
+? );
+? ! Derivatives of objective functions;
+? @FOR(TARGETS(i):
+?     dZdT(i) = B(i) * ( (beta*(alpha*G(i) + A)) / ( (beta*T(i) + alpha*G(i) + A)^2 
+?     dZdG(i) = D(i) * ( (beta*alpha*T(i)) / ( (beta*T(i) + alpha*G(i) + A)^2 ) );
+? );
+? ! Objective function (Defender's)
+? [TTL_COST] MIN = @SUM( ARCS: COST * VOL) +
+? @SUM( PLANTS: FCOST * OPEN);
+? [LOSSES] MIN = @SUM(TARGETS(i) : D(i) * P(i));
+? ! KKT stationarity conditions;
+? @FOR(TARGETS(i):
+?     dZdT(i) - lambda_t - mu_t(i) = 0;
+?     !dZdG(i) - lambda_g - mu_g(i) = 0;
+? );
+? ! Budget constraints;
+? @SUM(TARGETS(i): T(i)) = T_budget;
+? @SUM(TARGETS(i): G(i)) = G_budget;
+? ! Complementary slackness;
+? @FOR(TARGETS(i):
+?     mu_t(i) * T(i) = 0;
+?     !mu_g(i) * G(i) = 0;
+? );
+? ! Non-negativity;
+? @FOR(TARGETS(i):
+?     T(i) >= 0;
+?     G(i) >= 0;
+?     mu_t(i) >= 0;
+?     !mu_g(i) >= 0;
+? );
+? ! Free multipliers;
+? !@FREE lambda_t;
+? !@FREE lambda_g;
+? ! Results;
+? DATA:
+? @POINTER(9) = T;
+? @POINTER(10) = G;
+? @POINTER(11) = @STATUS();
+? ENDDATA
+? END
+:  GO
+  Compiling model ...
+  Structural analysis, pass 1 ...
+  Scalarizing model ...
+  Generating nonzero matrix ...
+  Solving ...
+ 
+  LINGO/WIN64 21.0.38 (22 Apr 2025), LINDO API 15.0.6099.233
+ 
+  Licensee info: Eval Use Only
+  License expires:  4 DEC 2025
+ 
+  Local optimal solution found.
+  Objective value:                              6.946374
+  Infeasibilities:                              0.000000
+  Total solver iterations:                            28
+  Elapsed runtime seconds:                          0.00
+ 
+  Running output operations ...
+ 
+  Model Class:                                       NLP
+ 
+  Total variables:                     36
+  Nonlinear variables:                 15
+  Integer variables:                    0
+ 
+  Total constraints:                   43
+  Nonlinear constraints:               20
+ 
+  Total nonzeros:                     100
+  Nonlinear nonzeros:                  40
+ 
+ 
+ 
+                                Variable           Value        Reduced Cost
+                               N_TARGETS        5.000000            0.000000
+                                   ALPHA        1.000000            0.000000
+                                    BETA        1.000000            0.000000
+                                       A       0.9900000            0.000000
+                                T_BUDGET        5.000000            0.000000
+                                G_BUDGET        30.00000            0.000000
+                                LAMBDA_T        1.196266            0.000000
+                                   T( 1)        0.000000            0.000000
+                                   T( 2)        0.000000            1008.905
+                                   T( 3)        5.000000            0.000000
+                                   T( 4)        0.000000            0.000000
+                                   T( 5)        0.000000            0.000000
+                                   G( 1)        0.000000            0.000000
+                                   G( 2)        0.000000           0.1930084
+                                   G( 3)        30.00000            0.000000
+                                   G( 4)        0.000000           0.1930084
+                                   G( 5)        0.000000           0.1930084
+                                   P( 1)        0.000000            0.000000
+                                   P( 2)        0.000000            0.000000
+                                   P( 3)       0.1389275            0.000000
+                                   P( 4)        0.000000            0.000000
+                                   P( 5)        0.000000            0.000000
+                                MU_T( 1)        19.00575            0.000000
+                                MU_T( 2)        99.81383            0.000000
+                                MU_T( 3)        0.000000            0.000000
+                                MU_T( 4)       0.8239357            0.000000
+                                MU_T( 5)        19.00575            0.000000
+                                MU_G( 1)        1.234568            0.000000
+                                MU_G( 2)        1.234568            0.000000
+                                MU_G( 3)        1.234568            0.000000
+                                MU_G( 4)        1.234568            0.000000
+                                MU_G( 5)        1.234568            0.000000
+                                DZDT( 1)        20.20202            0.000000
+                                DZDT( 2)        101.0101            0.000000
+                                DZDT( 3)        1.196266            0.000000
+                                DZDT( 4)        2.020202            0.000000
+                                DZDT( 5)        20.20202            0.000000
+                                DZDG( 1)        0.000000           0.9732506
+                                DZDG( 2)        0.000000            0.000000
+                                DZDG( 3)       0.1930084            0.000000
+                                DZDG( 4)        0.000000            0.000000
+                                DZDG( 5)        0.000000           0.9821836
+                                   B( 1)        20.00000            0.000000
+                                   B( 2)        100.0000            0.000000
+                                   B( 3)        50.00000            0.000000
+                                   B( 4)        2.000000            0.000000
+                                   B( 5)        20.00000            0.000000
+                                   D( 1)        70.00000            0.000000
+                                   D( 2)        1000.000            0.000000
+                                   D( 3)        50.00000            0.000000
+                                   D( 4)        75.00000            0.000000
+                                   D( 5)        150.0000            0.000000
+ 
+                                     Row    Slack or Surplus      Dual Price
+                                       1        0.000000           -70.00000
+                                       2        0.000000           -1000.000
+                                       3        0.000000           -50.00000
+                                       4        0.000000           -75.00000
+                                       5        0.000000           -150.0000
+                                       6        0.000000            0.000000
+                                       7        0.000000           0.9732506
+                                       8        0.000000            0.000000
+                                       9        0.000000            0.000000
+                                      10        0.000000            0.000000
+                                      11        0.000000            0.000000
+                                      12        0.000000            0.000000
+                                      13        0.000000            0.000000
+                                      14        0.000000            0.000000
+                                      15        0.000000           0.9821836
+                                  LOSSES        6.946374           -1.000000
+                                      17        0.000000            0.000000
+                                      18        0.000000            0.000000
+                                      19        0.000000            0.000000
+                                      20        0.000000            0.000000
+                                      21        0.000000            0.000000
+                                      22        0.000000           -1.196266
+                                      23        0.000000           0.1930084
+                                      24        0.000000            0.000000
+                                      25        0.000000            0.000000
+                                      26        0.000000            0.000000
+                                      27        0.000000            0.000000
+                                      28        0.000000            0.000000
+                                      29        0.000000            0.000000
+                                      30        0.000000          -0.1930084
+                                      31        19.00575            0.000000
+                                      32        0.000000            0.000000
+                                      33        0.000000            0.000000
+                                      34        99.81383            0.000000
+                                      35        5.000000            0.000000
+                                      36        30.00000            0.000000
+                                      37        0.000000            0.000000
+                                      38        0.000000           -74.56131
+                                      39        0.000000            0.000000
+                                      40       0.8239357            0.000000
+                                      41        0.000000            0.000000
+                                      42        0.000000            0.000000
+                                      43        19.00575            0.000000
+ 
+:  QUIT

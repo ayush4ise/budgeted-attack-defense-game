@@ -77,10 +77,13 @@
 
 - The model coefficients calculated at each iteration are saved in the [`models/itermodels`](models/itermodels) folder. Logs of the iterations are saved in [`logs/algorithm1.log`](logs/algorithm1.log).
 
-### Date - 30 July 2025
+### Date - 01 August 2025
 
 - We implement both simultaneous and sequential game models using the LINGO solver. The models are stored in [`LINGO models/simultaneous_game.lng`](LINGO%20models/simultaneous_game.lng) and [`LINGO models/sequential_game.lng`](LINGO%20models/sequential_game.lng).
+
 - The function `game_lingo_model` in ['utils.py'](utils.py) is used to run the LINGO models and get the results.
+
+- We implement a plotting function in [`plot_generator.py`](plot_generator.py) to generate plots for different algorithms by varying the parameters alpha, beta, and A. The plots are saved in the [`plots`](plots) folder.
 
 ## Algorithms
 

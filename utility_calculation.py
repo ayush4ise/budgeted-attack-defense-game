@@ -15,7 +15,7 @@ def utility_function(allocations, model_path):
         coeff + X coeffs + X^2 coeffs
     and returning the utility value
 
-    Parameters:
+    Parameters
     -----------
     allocations : np.array
         Entity's resource allocation to each target. Length must be n.
@@ -39,7 +39,7 @@ def optimize_utility(N, utility, budget, goal):
     """
     Function to access Gurobi to optimize allocations with a budget
 
-    Parameters:
+    Parameters
     -----------
     N : int
         Number of targets
