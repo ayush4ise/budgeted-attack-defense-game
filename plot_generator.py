@@ -108,7 +108,7 @@ def plotter_function(datasets, names, varying_param, save_path):
     """
 
     # Initialize the figure
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
 
     # Plot losses
     for data, name in zip(datasets, names):

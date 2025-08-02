@@ -60,4 +60,4 @@ column_names = [f'G{i}' for i in range(1,N_TARGETS+1)] + [f'T_best{i}' for i in 
 # Create a dataframe
 df = pd.DataFrame(combined_values, columns=column_names)
 # df.to_csv(f'data/dLoss_simulation_random{N_SAMPLES}.csv', index=False)
-df.to_csv(f'data/dLoss_simulation_lhs{N_SAMPLES}.csv', index=False)
+df.to_csv(f'data/dLoss_simulation_lhs{N_SAMPLES}_({alpha},{beta},{A}).csv', index=False)

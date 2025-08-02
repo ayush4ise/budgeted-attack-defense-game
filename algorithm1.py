@@ -82,7 +82,7 @@ while ITERATION < MAX_ITERS:
     model.fit(X,y)
 
     # Save new model
-    DMODEL_PATH = f'models/itermodels/dLoss_lhs_100_iter{ITERATION}.json'
+    DMODEL_PATH = f'models/itermodels/dLoss_lhs_100_iter{ITERATION}_({alpha},{beta},{A}).json'
     with open(DMODEL_PATH, "w", encoding="utf-8") as fp:
         json.dump({
         'intercept' : round(model.intercept_,2),

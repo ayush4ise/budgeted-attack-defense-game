@@ -31,7 +31,7 @@ def utility_function(allocations, model_path):
     for i,_ in enumerate(allocations):
         utility += coeffs['coefficients'][i] * allocations[i] # Adding the Xi term
         # Adding the Xi^2 term
-        utility += coeffs['coefficients'][i+len(allocations)] * allocations[i] * allocations[i] 
+        utility += coeffs['coefficients'][i+len(allocations)] * allocations[i] * allocations[i]
 
     return utility
 
@@ -53,7 +53,7 @@ def optimize_utility(N, utility, budget, goal):
     goal : str
         ['MINIMIZE', 'MAXIMIZE']
 
-    Returns:
+    Returns
     --------
     allocations : array
         Optimal allocations for the entity

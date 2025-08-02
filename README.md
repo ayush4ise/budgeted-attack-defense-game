@@ -63,9 +63,9 @@
 
 ### Date - 12 July 2025
 
-- Python library [`PyDOE3`](https://pydoe3.readthedocs.io/en/latest/) is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in [`aGain_simulation.py`](aGain_simulation.py) and [`dLoss_simulation.py`](dLoss_simulation.py). The results are stored in [`data/aGain_simulation_lhs100.csv`](data/aGain_simulation_lhs100.csv) and [`data/dLoss_simulation_lhs100.csv`](data/dLoss_simulation_lhs100.csv), respectively.
+- Python library [`PyDOE3`](https://pydoe3.readthedocs.io/en/latest/) is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in [`aGain_simulation.py`](aGain_simulation.py) and [`dLoss_simulation.py`](dLoss_simulation.py). The results are stored in [`data/aGain_simulation_lhs100_(1,1,0.1).csv`](data/aGain_simulation_lhs100_(1,1,0.1).csv) and [`data/dLoss_simulation_lhs100_(1,1,0.1).csv`](data/dLoss_simulation_lhs100_(1,1,0.1).csv), respectively.
 
-- We fit quadratic regression models to this simulated data using [`estimation.py`](estimation.py). The model coefficients are saved in the [`models`](models) folder as [`aGain_model_lhs100.json`](models/aGain_model_lhs100.json) and [`dLoss_model_lhs100.json`](models/dLoss_model_lhs100.json).
+- We fit quadratic regression models to this simulated data using [`estimation.py`](estimation.py). The model coefficients are saved in the [`models`](models) folder as [`aGain_model_lhs100.json`](models/aGain_model_lhs100_(1,1,0.1).json) and [`dLoss_model_lhs100.json`](models/dLoss_model_lhs100_(1,1,0.1).json).
 
 - We use these estimated utility functions to carry out utility calculation using [`utility_calculation.py`](utility_calculation.py). The results are updated in [`results/utility_comparison.xlsx`](results/utility_comparison.xlsx).
 
@@ -73,7 +73,7 @@
 
 - We implement an iterative algorithm to find optimal allocations for the attacker and defender. The algorithm is implemented in [`algorithm.py`](algorithm1.py). Explanation of the algorithn is provided [below](#algorithm-1---iterative-model-updation).
 
-- The updated dataset is stored in [`data/dLoss_updated_lhs100.csv`](data/dLoss_updated_lhs100.csv).
+- The updated dataset is stored in [`data/dLoss_updated_lhs100.csv`](data/dLoss_updated_lhs100_(1,1,0.1).csv).
 
 - The model coefficients calculated at each iteration are saved in the [`models/itermodels`](models/itermodels) folder. Logs of the iterations are saved in [`logs/algorithm1.log`](logs/algorithm1.log).
 
@@ -84,6 +84,12 @@
 - The function `game_lingo_model` in ['utils.py'](utils.py) is used to run the LINGO models and get the results.
 
 - We implement a plotting function in [`plot_generator.py`](plot_generator.py) to generate plots for different algorithms by varying the parameters alpha, beta, and A. The plots are saved in the [`plots`](plots) folder.
+
+## Date - 02 August 2025
+
+- We implement a utility function class in [`utility_function.py`](utility_function.py) for all functions related to utility functions, including estimation and optimization for both the attacker and defender.
+
+- The utility funciton class can be used in the iterative algorithm to optimize the utility functions. It currently supports **quadratic** utility functions, and can be extended to support other types of utility functions.
 
 ## Algorithms
 
@@ -107,6 +113,12 @@
 - Also make greedy and random allocation methods, and compare results with the iterative algorithm.
 - Do train-test splits for the regression models.
 - Better convergence criteria for the iterative algorithm.
+
+## Estimators
+
+The following estimators are currently supported in the `UtilityFunction` class:
+
+- **Quadratic**: Quadratic utility function, with no interactions between allocations.
 
 ## Results
 
