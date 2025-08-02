@@ -65,7 +65,7 @@
 
 - Python library [`PyDOE3`](https://pydoe3.readthedocs.io/en/latest/) is used to generate a Latin Hypercube Sample (LHS) for the simulations, which is implemented and updated in [`aGain_simulation.py`](aGain_simulation.py) and [`dLoss_simulation.py`](dLoss_simulation.py). The results are stored in [`data/aGain_simulation_lhs100_(1,1,0.1).csv`](data/aGain_simulation_lhs100_(1,1,0.1).csv) and [`data/dLoss_simulation_lhs100_(1,1,0.1).csv`](data/dLoss_simulation_lhs100_(1,1,0.1).csv), respectively.
 
-- We fit quadratic regression models to this simulated data using [`estimation.py`](estimation.py). The model coefficients are saved in the [`models`](models) folder as [`aGain_model_lhs100.json`](models/aGain_model_lhs100_(1,1,0.1).json) and [`dLoss_model_lhs100.json`](models/dLoss_model_lhs100_(1,1,0.1).json).
+- We fit quadratic regression models to this simulated data using [`estimation.py`](estimation.py). The model coefficients are saved in the [`models`](models) folder as [`aGain_model_lhs100.json`](models/aGain_qni_lhs100_(1,1,0.1).json) and [`dLoss_model_lhs100.json`](models/dLoss_qni_lhs100_(1,1,0.1).json).
 
 - We use these estimated utility functions to carry out utility calculation using [`utility_calculation.py`](utility_calculation.py). The results are updated in [`results/utility_comparison.xlsx`](results/utility_comparison.xlsx).
 
@@ -119,6 +119,17 @@
 The following estimators are currently supported in the `UtilityFunction` class:
 
 - **Quadratic**: Quadratic utility function, with no interactions between allocations.
+
+## Abbreviations
+
+The following abbreviations are used in defining some of the models and data files:
+
+- lhs100: Latin Hypercube Sampling with 100 samples
+- dLoss: Defender's Loss
+- aGain: Attacker's Gain
+- (1,1,0.1): Parameters for the utility functions, where 1 is the alpha value, 1 is the beta value, and 0.1 is the A value
+- qni: Quadratic Non-Interactive
+- random20: Random sampling of 20 data points
 
 ## Results
 
