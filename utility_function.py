@@ -8,6 +8,7 @@ import numpy as np
 import gurobipy as gp
 from gurobipy import GRB
 from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
 
 class UtilityFunction():
     """Class for everything related to utility function and estimation"""
@@ -48,7 +49,7 @@ class UtilityFunction():
             data = pd.read_csv(filepath)
 
         if self.function_type == 'quadratic':
-            # Defining X and y for regression
+            # Extracting X and y for regression
             X_1 = np.array(data[data.columns[:self.n_targets]])   # Degree 1 features
             X_2 = X_1**2                                # Get quadratic features
             y = data[data.columns[-1]]                  # Gains/Losses
@@ -63,8 +64,25 @@ class UtilityFunction():
                 }
 
             self.model = coefficients
-            if savepath:
-                self.save_model(savepath)
+
+        if self.function_type == 'quadratic_int':
+            # Extracting X and y for regression
+            X = np.array(data[data.columns[:self.n_targets]])
+            y = data[data.columns[-1]]
+            poly = PolynomialFeatures(degree=2)
+            X_poly = poly.fit_transform(X) # Degree 2 features including interactions
+
+            model = LinearRegression() # Fit linear regression on polynomial-transformed features
+            model.fit(X_poly, y)
+
+            coefficients = {
+                'intercept' : round(model.intercept_,2),
+                'coefficients' : [round(coef,2) for coef in model.coef_]
+                }
+            self.model = coefficients
+
+        if savepath:
+            self.save_model(savepath)
 
     def utility_function(self, allocations, modelpath):
         """
@@ -83,10 +101,24 @@ class UtilityFunction():
 
         if self.function_type == 'quadratic':
             utility = self.model['intercept']
-            for i,_ in enumerate(allocations):
+            for i in range(self.n_targets):
                 utility += self.model['coefficients'][i] * allocations[i] # Adding the Xi term
                 # Adding the Xi^2 term
                 utility += self.model['coefficients'][i+len(allocations)] * allocations[i] * allocations[i]
+            return utility
+
+        if self.function_type == 'quadratic_int':
+            # Features are arranged as follows -
+            # ['1', 'G1', 'G2', 'G3', 'G4', 'G5', 'G1^2', 'G1 G2', 'G1 G3','G1 G4', 'G2^2',
+            # 'G2 G3', 'G2 G4', 'G2 G5', 'G3^2','G3 G4', 'G3 G5', 'G4^2', 'G4 G5', 'G5^2']
+            utility = self.model['intercept']
+            coeffs = self.model['coefficients'] # Copying since using pop()
+            coeffs.pop() # Coefficient of X0
+            for i in range(self.n_targets):
+                utility += coeffs.pop(0) * allocations[i] # Degree 1 terms
+            for i in range(self.n_targets):
+                for j in range(self.n_targets - i):
+                    utility += coeffs.pop(0) * allocations[i] * allocations[i+j] # Degree 2 terms
             return utility
         return None
 
@@ -142,7 +174,7 @@ if __name__ == "__main__":
     MODELPATH = "models/classtester.json"
 
     defender_utility = UtilityFunction(
-        entity=ENTITY, 
+        entity=ENTITY,
         function_type=F_TYPE,
         n_targets = 5,
         t_budget = 5, g_budget = 30)

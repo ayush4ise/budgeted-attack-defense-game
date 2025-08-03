@@ -3,7 +3,7 @@
 import lingo_api as lingo
 import numpy as np
 
-def prob_success(Ti, Gi, alpha=1, beta=1, Ai=0.1):
+def prob_success(Ti, Gi, alpha, beta, Ai):
     "Probability of successful attack on target i"
     return (beta * Ti) / (beta * Ti + alpha * Gi + Ai)
 
@@ -262,6 +262,60 @@ def game_lingo_model(game_type, n_targets, alpha, beta, A, b_list, d_list, t_bud
         print("\nLocal optimum found!")
     else:
         print("\nSolution is non-optimal\n")
+
+    # Calculate losses and gains
+    losses = np.dot(d_list, prob_success(Ti=T, Gi=G, alpha=alpha, beta=beta, Ai=A))
+    gains = np.dot(b_list, prob_success(Ti=T, Gi=G, alpha=alpha, beta=beta, Ai=A))
+
+    return {
+        "Defender's allocations" : G,
+        "Attacker's allocations" : T,
+        "Defender's Losses"      : losses,
+        "Attacker's Gains"       : gains
+    }
+
+def greedy_allocation(n_targets, alpha, beta, A, b_list, d_list, t_budget, g_budget):
+    """
+    Return greedy allocations by only focusing on the target with highest valuation.
+
+    Parameters
+    ----------
+    n_targets : int
+        Number of targets.
+    alpha : float
+        Defender's influence parameter in the success probability function.
+    beta : float
+        Attacker's influence parameter in the success probability function.
+    A : float
+        Inherent defense level of the targets.
+    b_list : np.array
+        Attacker's valuation (importance) of each target. Length must be n_targets.
+    d_list : np.array
+        Defender's valuation (importance) of each target. Length must be n_targets.
+    t_budget : float or int
+        Total budget available to the attacker.
+    g_budget : float or int
+        Total budget available to the defender.
+
+    Returns
+    -------
+    np.array
+        A NumPy array containing the entity's resource allocations to each target.
+    """
+    allocations = np.zeros(n_targets)
+    max_index = np.argmax(d_list)  # Find the index of the highest-valued target
+    allocations[max_index] = g_budget    # Allocate the entire budget to this target
+
+    G = allocations
+    T = attacker_lingo_model(
+        n_targets=n_targets,
+        alpha=alpha,
+        beta=beta,
+        A=A,
+        t_budget=t_budget,
+        B_list=b_list,
+        G_list=G
+    )
 
     # Calculate losses and gains
     losses = np.dot(d_list, prob_success(Ti=T, Gi=G, alpha=alpha, beta=beta, Ai=A))

@@ -7,10 +7,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import lingo_api
-from utils import game_lingo_model
+from utils import game_lingo_model, greedy_allocation
+from algorithm1 import algorithm1
 
 # Setting up logging
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s: %(levelname)s %(message)s',
                     datefmt='%d/%m/%Y %I:%M:%S %p',
                     handlers=[logging.FileHandler('logs/plot_generator.log'), logging.StreamHandler()])
@@ -31,6 +32,15 @@ def algorithm_str(algorithm):
 
     if algorithm == "actual_simultaneous":
         return partial(game_lingo_model, game_type="simultaneous")
+
+    if algorithm == "greedy":
+        return greedy_allocation
+
+    if algorithm == "algorithm1_quad":
+        return partial(algorithm1, defender_ftype="quadratic")
+
+    if algorithm == "algorithm1_quad_int":
+        return partial(algorithm1, defender_ftype="quadratic_int")
 
     return logging.error("Algorithm not available.")
 
@@ -62,11 +72,11 @@ def data_collector(algorithm, varying_param = "A", varying_range = (0,1,0.01), *
     algo_func = algorithm_str(algorithm=algorithm)
     losses, gains, values = [], [], []
 
-    for val in np.arange(*varying_range):
+    for val in np.round(np.arange(*varying_range),2):
         params = {varying_param: val, **algorithm_params}
         try:
             results = algo_func(**params)
-        except lingo_api.LingoError:
+        except:
             logging.info("Infeasible problem")
             results = {
                 "Defender's Losses" : 0,
@@ -108,7 +118,7 @@ def plotter_function(datasets, names, varying_param, save_path):
     """
 
     # Initialize the figure
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,5))
 
     # Plot losses
     for data, name in zip(datasets, names):
@@ -139,14 +149,58 @@ def plotter_function(datasets, names, varying_param, save_path):
 
 if __name__ == '__main__':
 
-    data = data_collector(algorithm="actual_sequential",
-                          varying_param="A",
-                          varying_range=(0.01,1,0.01),
-                          n_targets = 5,
-                          alpha = 1, beta = 1,
-                          b_list = np.array([20, 100, 50, 2, 20]),
-                          d_list = np.array([70, 1000, 50, 75, 150]),
-                          t_budget = 5, g_budget = 30)
+    # Parameters
+    NUM_TARGETS = 5
+    A_BUDGET = 5 # Attacker's budget
+    D_BUDGET = 30 # Defender's budget
+    ALPHA, BETA = 1, 1
 
-    plotter_function(datasets=[data], names=['actual_sequential'],
-                     varying_param="A", save_path="plots/actual_seq_A.png")
+    B = np.array([20, 100, 50, 2, 20]) # Attacker's valuations
+    D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
+
+    MAX_ITERS = 30
+
+    # data_actual_seq = data_collector(algorithm="actual_sequential",
+    #                       varying_param="A",
+    #                       varying_range=(0.01,1,0.01),
+    #                       n_targets = 5,
+    #                       alpha = 1, beta = 1,
+    #                       b_list = np.array([20, 100, 50, 2, 20]),
+    #                       d_list = np.array([70, 1000, 50, 75, 150]),
+    #                       t_budget = 5, g_budget = 30)
+
+    # data_greedy = data_collector(algorithm="greedy",
+    #                       varying_param="A",
+    #                       varying_range=(0.01,1,0.01),
+    #                       n_targets = 5,
+    #                       alpha = 1, beta = 1,
+    #                       b_list = np.array([20, 100, 50, 2, 20]),
+    #                       d_list = np.array([70, 1000, 50, 75, 150]),
+    #                       t_budget = 5, g_budget = 30)
+
+    # data_quad = data_collector(algorithm="algorithm1_quad",
+    #                       varying_param="A",
+    #                       varying_range=(0.01,1,0.01),
+    #                       n_targets = 5,
+    #                       alpha = 1, beta = 1,
+    #                       attacker_budget=A_BUDGET,defender_budget=D_BUDGET,
+    #                       attacker_valuation=B,defender_valuation=D,
+    #                       max_iters = 30)
+
+    # data_quad_int = data_collector(algorithm="algorithm1_quad_int",
+    #                       varying_param="A",
+    #                       varying_range=(0.01,1,0.01),
+    #                       n_targets = 5,
+    #                       alpha = 1, beta = 1,
+    #                       attacker_budget=A_BUDGET,defender_budget=D_BUDGET,
+    #                       attacker_valuation=B,defender_valuation=D,
+    #                       max_iters = 30)
+
+    data_actual_seq = pd.read_csv("data/actual_sequential_A_(0.01, 1, 0.01).csv")
+    data_quad = pd.read_csv("data/algorithm1_quad_A_(0.01, 1, 0.01).csv")
+    # data_quad_int = pd.read_csv("data/algorithm1_quad_int_A_(0.01, 1, 0.01).csv")
+    data_greedy = pd.read_csv("data/greedy_A_(0.01, 1, 0.01).csv")
+
+    plotter_function(datasets=[data_actual_seq, data_greedy, data_quad],
+                     names=['actual_sequential', 'greedy', 'algorithm1_quad'],
+                     varying_param="A", save_path="plots/actual+greedy+quad_A.png")

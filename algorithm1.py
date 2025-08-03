@@ -56,7 +56,7 @@ def algorithm1(**kwargs):
         - "Attacker's Gains"       : float
     """
     n_targets = kwargs.get("n_targets")
-    max_iters = kwargs.get("max_iters")
+    max_iters = kwargs.get("max_iters",30)
     defender_ftype = kwargs.get("defender_ftype")
 
     # Parameters
@@ -65,8 +65,8 @@ def algorithm1(**kwargs):
     defender_valuation = kwargs.get("defender_valuation")
     attacker_valuation = kwargs.get("attacker_valuation")
     alpha, beta, A = kwargs.get("alpha"), kwargs.get("beta"), kwargs.get("A")
-
-    loss_data = pd.read_csv(kwargs.get("datapath")) # Reading simulation data for defender's loss
+    # Reading simulation data for defender's loss
+    loss_data = pd.read_csv(f"data/dLoss_simulation_lhs100_({alpha},{beta},{A}).csv")
 
     # Define defender's utility instance
     defender_utility = UtilityFunction(function_type=defender_ftype, entity="defender",
@@ -107,7 +107,7 @@ def algorithm1(**kwargs):
                     savepath=f"models/itermodels/dLoss_iter{iteration}_({alpha},{beta},{A}).json")
         logging.info("Model updated and saved!")
         iteration+=1 # Update iteration
-    loss_data.to_csv(kwargs.get("updatepath"))
+    loss_data.to_csv(f"data/dLoss_updated_lhs100_({alpha},{beta},{A}).csv")
     logging.info("Updated data saved!")
     logging.info("Terminated after %s iterations.", iteration-1)
 
@@ -133,14 +133,13 @@ if __name__ == "__main__":
 
     DEFENDER_FTYPE = "quadratic"
 
-    EXISTING_DATA = 'data/dLoss_simulation_lhs100_(1,1,0.1).csv'
-    UPDATED_DATA = 'data/dLoss_updated_lhs100_(1,1,0.1).csv'
+    # EXISTING_DATA = 'data/dLoss_simulation_lhs100_(1,1,0.1).csv'
+    # UPDATED_DATA = 'data/dLoss_updated_lhs100_(1,1,0.1).csv'
 
     results = algorithm1(n_targets=NUM_TARGETS,
                          max_iters=MAX_ITERS,
                          defender_ftype=DEFENDER_FTYPE,
                          attacker_budget=A_BUDGET,defender_budget=D_BUDGET,
                          attacker_valuation=B,defender_valuation=D,
-                         alpha=ALPHA,beta=BETA,A=A,
-                         datapath=EXISTING_DATA,updatepath=UPDATED_DATA)
+                         alpha=ALPHA,beta=BETA,A=A)
     print(results)

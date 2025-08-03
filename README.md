@@ -93,6 +93,18 @@
 
 - [`algorithm1.py`](algorithm1.py) is re-written to turn the algorithm into a function `algorithm1`, which utilizes the `UtilityFunction` class and returns the optimal allocations, losses, and gains for the attacker and defender.
 
+## Date - 03 August 2025
+
+- We run simulations to collect data for the defender's losses using the [`dLoss_simulation.py`](`dLoss_simulation.py`) script by varying the parameter 'A'. This is done so that when we run `algorithm1` for plotting, we use the data with appropriate values of 'A' every time.
+
+- The results of the simulations are stored in the `data` folder, with filenames indicating the parameter values used.
+
+- We implement a greedy allocation method [`utils.py`](utils.py) to compare the results with the iterative algorithm. The greedy method allocates resources to the targets based on the maximum valuation of the targets, and is used to generate a baseline for comparison.
+
+- We add the **quadratic with interactions** utility function to the `UtilityFunction` class, which allows for interactions between allocations. The model coefficients obtained by fitting the model to the simulated data are absymally bad.
+
+- We plot the results of the iterative algorithm and greedy method using the [`plot_generator.py`](`plot_generator.py`) script. The plots are saved in the `plots` folder.
+
 ## Algorithms
 
 ### Algorithm 1 - Iterative Model Updation
@@ -113,7 +125,7 @@
 - Try different estimators, preferably differentiable ones, so that the solver can optimize the model. [SVM, ANN maybe, etc.]
 - Make plots, by varying A, B, alpha values in the probability success function. Pay attention to files where these values were fixed and change that.
 - Also make greedy and random allocation methods, and compare results with the iterative algorithm.
-- Do train-test splits for the regression models.
+- Do train-test splits for the regression models and calculate the R-squared value.
 - Better convergence criteria for the iterative algorithm.
 
 ## Estimators
@@ -121,6 +133,7 @@
 The following estimators are currently supported in the `UtilityFunction` class:
 
 - **Quadratic**: Quadratic utility function, with no interactions between allocations.
+- **Quadratic with Interactions**: Quadratic utility function, with interactions between allocations.
 
 ## Abbreviations
 
@@ -130,10 +143,13 @@ The following abbreviations are used in defining some of the models, data files 
 - G: Defender's allocations
 - B: Attacker's budget
 - D: Defender's budget
+- alpha: Defender's influence parameter in the success probability function. Range (0,1]
+- beta: Attacker's influence parameter in the success probability function. Range (0,1]
+- A: Inherent defense level of the targets. Range (0,10]
 - lhs100: Latin Hypercube Sampling with 100 samples
 - dLoss: Defender's Loss
 - aGain: Attacker's Gain
-- (1,1,0.1): Parameters for the utility functions, where 1 is the alpha value, 1 is the beta value, and 0.1 is the A value
+- (1,1,0.1): Parameters for the utility functions, where 1 is the alpha value, 1 is the beta value, and 0.1 is the A value.
 - qni: Quadratic Non-Interactive
 - random20: Random sampling of 20 data points
 
@@ -152,6 +168,7 @@ The following abbreviations are used in defining some of the models, data files 
 
 ## Doubts/Suggestions
 
+- Should the random allocation method be completely random for the given parameter value for plotting?
 - Effect of valuations on estimated utility functions (and results) can be studied.
 - Effect of budget too can be studied.
 
