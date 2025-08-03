@@ -101,7 +101,7 @@
 
 - We implement a greedy allocation method [`utils.py`](utils.py) to compare the results with the iterative algorithm. The greedy method allocates resources to the targets based on the maximum valuation of the targets, and is used to generate a baseline for comparison.
 
-- We add the **quadratic with interactions** utility function to the `UtilityFunction` class, which allows for interactions between allocations. The model coefficients obtained by fitting the model to the simulated data are absymally bad.
+- We add the **quadratic with interactions** utility function to the `UtilityFunction` class, which allows for interactions between allocations. The model coefficients obtained by fitting the model to the simulated data are absymally bad. The coefficients change significantly too, when the data is taken as a whole instead of splitting it into training and test sets.
 
 - We plot the results of the iterative algorithm and greedy method using the [`plot_generator.py`](`plot_generator.py`) script. The plots are saved in the `plots` folder.
 
@@ -165,6 +165,13 @@ The following abbreviations are used in defining some of the models, data files 
   - Defender Allocations, G = [1.71, 22.426, 2.638, 0, 3.226]
   - Attacker's Total Gains = 38.08
   - Defender's Total Losses = 92.215
+
+- Defender's estimated utility function R-squared values [alpha=1, beta=1, A=0.1]:
+
+| Model Type                  | Training R-squared | Test R-squared |
+|------------                 |--------------------|----------------|
+| Quadratic                   | 0.9857             | 0.9673         |
+| Quadratic with Interactions | 0.9883             | 0.9674         |
 
 ## Doubts/Suggestions
 
