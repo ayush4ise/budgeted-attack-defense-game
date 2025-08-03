@@ -17,7 +17,7 @@ class UtilityFunction():
         Such as - n_targets, alpha, beta, A, b_list, d_list, t_budget, g_budget
 
         function_type : str
-            The type of utility function we're using - ['quadratic','quadratic_int','actual']
+            The type of utility function we're using - ['quadratic','quadratic_int']
 
         entity : str
             The type of entity - ['attacker', 'defender']
@@ -29,20 +29,25 @@ class UtilityFunction():
             setattr(self, key, value)
         self.n_targets = getattr(self,"n_targets")
 
-    def estimate_function(self, filepath, savepath=None):
+    def estimate_function(self, data = None, filepath=None, savepath=None):
         """
         Function to fit a regressor to the data and estimate the utility function
 
         Parameters
         ----------
-        filepath: str
+        data: pd.DataFrame
+            Contains data for regression. Either this or filepath is required
+
+        filepath: str (Optional)
             Path to the data file used for fitting the model
 
         savepath: str (Optional)
             Path to save the fitted model coefficients
         """
-        if self.function_type == 'quadratic':
+        if filepath:
             data = pd.read_csv(filepath)
+
+        if self.function_type == 'quadratic':
             # Defining X and y for regression
             X_1 = np.array(data[data.columns[:self.n_targets]])   # Degree 1 features
             X_2 = X_1**2                                # Get quadratic features
@@ -88,6 +93,11 @@ class UtilityFunction():
     def optimize(self, modelpath=None):
         """
         Use Gurobi to optimize the utility function with budget constraints
+        
+        Returns
+        -------
+        allocations : np.array
+            Optimal allocations for the entity
         """
         targets = list(range(self.n_targets))
         with gp.Env(empty=True) as env:

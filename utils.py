@@ -175,7 +175,8 @@ def defender_lingo_model(n_targets, alpha, beta, A, g_budget, D_list, T_list):
 
 def game_lingo_model(game_type, n_targets, alpha, beta, A, b_list, d_list, t_budget, g_budget):
     """
-    Solve the sequential or simultaneous game in LINGO and return attacker's and defender's allocations.
+    Solve the sequential or simultaneous game in LINGO and return 
+    attacker's and defender's allocations.
 
     Parameters
     ----------
@@ -204,6 +205,8 @@ def game_lingo_model(game_type, n_targets, alpha, beta, A, b_list, d_list, t_bud
         Dictionary containing:
         - "Defender's allocations" : np.array
         - "Attacker's allocations" : np.array
+        - "Defender's Losses"      : float,
+        - "Attacker's Gains"       : float
     """
 
     # Defines uData and an error callback function for each model to call

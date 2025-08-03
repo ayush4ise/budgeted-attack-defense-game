@@ -71,7 +71,7 @@
 
 ### Date - 19 July 2025
 
-- We implement an iterative algorithm to find optimal allocations for the attacker and defender. The algorithm is implemented in [`algorithm.py`](algorithm1.py). Explanation of the algorithn is provided [below](#algorithm-1---iterative-model-updation).
+- We implement an iterative algorithm to find optimal allocations for the attacker and defender. The algorithm is implemented in [`algorithm1.py`](algorithm1.py). Explanation of the algorithn is provided [below](#algorithm-1---iterative-model-updation).
 
 - The updated dataset is stored in [`data/dLoss_updated_lhs100.csv`](data/dLoss_updated_lhs100_(1,1,0.1).csv).
 
@@ -90,6 +90,8 @@
 - We implement a utility function class in [`utility_function.py`](utility_function.py) for all functions related to utility functions, including estimation and optimization for both the attacker and defender.
 
 - The utility funciton class can be used in the iterative algorithm to optimize the utility functions. It currently supports **quadratic** utility functions, and can be extended to support other types of utility functions.
+
+- [`algorithm1.py`](algorithm1.py) is re-written to turn the algorithm into a function `algorithm1`, which utilizes the `UtilityFunction` class and returns the optimal allocations, losses, and gains for the attacker and defender.
 
 ## Algorithms
 
@@ -122,8 +124,12 @@ The following estimators are currently supported in the `UtilityFunction` class:
 
 ## Abbreviations
 
-The following abbreviations are used in defining some of the models and data files:
+The following abbreviations are used in defining some of the models, data files and variables:
 
+- T: Attacker's allocations
+- G: Defender's allocations
+- B: Attacker's budget
+- D: Defender's budget
 - lhs100: Latin Hypercube Sampling with 100 samples
 - dLoss: Defender's Loss
 - aGain: Attacker's Gain
