@@ -49,7 +49,7 @@ for allocation in allocations:
         T_list=T
     )
 
-    utility = np.dot(B, [prob_success(Ti=Ti,Gi=Gi) for Ti,Gi in zip(T,G)])
+    utility = np.dot(B, [prob_success(Ti=Ti,Gi=Gi, alpha=alpha, beta=beta, Ai=A) for Ti,Gi in zip(T,G)])
     print('Z_t:', utility)
 
     combined_values.append(list(T) + list(G) + [utility])
@@ -60,4 +60,4 @@ column_names = [f'T{i}' for i in range(1,N_TARGETS+1)] + [f'G_best{i}' for i in 
 # Create a dataframe
 df = pd.DataFrame(combined_values, columns=column_names)
 # df.to_csv(f'data/aGain_simulation_random{N_SAMPLES}.csv', index=False)
-df.to_csv(f'data/aGain_simulation_lhs{N_SAMPLES}_({alpha},{beta},{A}).csv', index=False)
+df.to_csv(f'data/simulations/aGain_simulation_lhs{N_SAMPLES}_({alpha},{beta},{A}).csv', index=False)

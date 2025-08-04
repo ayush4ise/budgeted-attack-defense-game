@@ -145,7 +145,7 @@ The following abbreviations are used in defining some of the models, data files 
 - D: Defender's budget
 - alpha: Defender's influence parameter in the success probability function. Range (0,1]
 - beta: Attacker's influence parameter in the success probability function. Range (0,1]
-- A: Inherent defense level of the targets. Range (0,10]
+- A: Inherent defense level of the targets. Range (0,1]
 - lhs100: Latin Hypercube Sampling with 100 samples
 - dLoss: Defender's Loss
 - aGain: Attacker's Gain
@@ -156,15 +156,18 @@ The following abbreviations are used in defining some of the models, data files 
 ## Results
 
 - Simultaneous game solution from LINGO model:
-  - Attacker Allocations, T = [0.614, 1.349, 2.685, 0.008, 0.345]
-  - Defender Allocations, G = [2.99, 19.303, 3.762, 0.328, 3.618]
-  - Attacker's Total Gains = 32.056
-  - Defender's Total Losses = 111.228
+
+| Entity | Target1 | Target2 | Target3 | Target4 | Target5 | Total Gains/Losses |
+|--------|---------|---------|---------|---------|---------|--------------------|
+| Attacker| 0.614  | 1.349   | 2.685   | 0.008   | 0.345   | 32.056             |
+| Defender| 2.99   | 19.303  | 3.762   | 0.328   | 3.618   | 111.228            |
+
 - Sequential game solution from LINGO model:
-  - Attacker Allocations, T = [1.094, 0.385, 2.91, 0, 0.611]
-  - Defender Allocations, G = [1.71, 22.426, 2.638, 0, 3.226]
-  - Attacker's Total Gains = 38.08
-  - Defender's Total Losses = 92.215
+
+| Entity | Target1 | Target2 | Target3 | Target4 | Target5 | Total Gains/Losses |
+|--------|---------|---------|---------|---------|---------|--------------------|
+| Attacker| 1.094  | 0.385   | 2.91    | 0       | 0.611   | 38.08              |
+| Defender| 1.71   | 22.426  | 2.638   | 0       | 3.226   | 92.215             |
 
 - Defender's estimated utility function R-squared values [alpha=1, beta=1, A=0.1]:
 
@@ -176,6 +179,7 @@ The following abbreviations are used in defining some of the models, data files 
 ## Doubts/Suggestions
 
 - Should the random allocation method be completely random for the given parameter value for plotting?
+- What exactly should be the range of the parameter A?
 - Effect of valuations on estimated utility functions (and results) can be studied.
 - Effect of budget too can be studied.
 

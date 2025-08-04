@@ -6,7 +6,6 @@ from functools import partial
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import lingo_api
 from utils import game_lingo_model, greedy_allocation
 from algorithm1 import algorithm1
 
@@ -44,7 +43,7 @@ def algorithm_str(algorithm):
 
     return logging.error("Algorithm not available.")
 
-def data_collector(algorithm, varying_param = "A", varying_range = (0,1,0.01), **algorithm_params):
+def data_collector(algorithm, varying_param = "A", varying_range = (0.01,1,0.01), **algorithm_params):
     """
     Collects data for a given algorithm by varying a parameters
 
@@ -153,54 +152,60 @@ if __name__ == '__main__':
     NUM_TARGETS = 5
     A_BUDGET = 5 # Attacker's budget
     D_BUDGET = 30 # Defender's budget
-    ALPHA, BETA = 1, 1
 
     B = np.array([20, 100, 50, 2, 20]) # Attacker's valuations
     D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
 
-    MAX_ITERS = 30
+    MAX_ITERS = 30 # For Algorithm 1
 
-    # data_actual_seq = data_collector(algorithm="actual_sequential",
-    #                       varying_param="A",
-    #                       varying_range=(0.01,1,0.01),
-    #                       n_targets = 5,
-    #                       alpha = 1, beta = 1,
-    #                       b_list = np.array([20, 100, 50, 2, 20]),
-    #                       d_list = np.array([70, 1000, 50, 75, 150]),
-    #                       t_budget = 5, g_budget = 30)
+    VARYING_PARAM = "beta"
+    VARYING_RANGE = (0.01,1, 0.01)
+    ALPHA = 1
+    # BETA = 1
+    A = 0.1
 
-    # data_greedy = data_collector(algorithm="greedy",
-    #                       varying_param="A",
-    #                       varying_range=(0.01,1,0.01),
-    #                       n_targets = 5,
-    #                       alpha = 1, beta = 1,
-    #                       b_list = np.array([20, 100, 50, 2, 20]),
-    #                       d_list = np.array([70, 1000, 50, 75, 150]),
-    #                       t_budget = 5, g_budget = 30)
+    data_actual_seq = data_collector(algorithm="actual_sequential",
+                          varying_param=VARYING_PARAM,
+                          varying_range=VARYING_RANGE,
+                          n_targets = NUM_TARGETS,
+                          b_list = B,
+                          d_list = D,
+                          t_budget = A_BUDGET, g_budget = D_BUDGET,
+                          alpha = ALPHA, A = A)
 
-    # data_quad = data_collector(algorithm="algorithm1_quad",
-    #                       varying_param="A",
-    #                       varying_range=(0.01,1,0.01),
-    #                       n_targets = 5,
-    #                       alpha = 1, beta = 1,
-    #                       attacker_budget=A_BUDGET,defender_budget=D_BUDGET,
-    #                       attacker_valuation=B,defender_valuation=D,
-    #                       max_iters = 30)
+    data_greedy = data_collector(algorithm="greedy",
+                          varying_param=VARYING_PARAM,
+                          varying_range=VARYING_RANGE,
+                          n_targets = NUM_TARGETS,
+                          b_list = B,
+                          d_list = D,
+                          t_budget = A_BUDGET, g_budget = D_BUDGET,
+                          alpha = ALPHA, A = A)
+
+    data_quad = data_collector(algorithm="algorithm1_quad",
+                          varying_param=VARYING_PARAM,
+                          varying_range=VARYING_RANGE,
+                          n_targets = NUM_TARGETS,
+                          attacker_budget=A_BUDGET,defender_budget=D_BUDGET,
+                          attacker_valuation=B,defender_valuation=D,
+                          max_iters = MAX_ITERS,
+                          alpha = ALPHA, A=A)
 
     # data_quad_int = data_collector(algorithm="algorithm1_quad_int",
-    #                       varying_param="A",
-    #                       varying_range=(0.01,1,0.01),
+    #                       varying_param=VARYING_PARAM,
+    #                       varying_range=VARYING_RANGE,
     #                       n_targets = 5,
     #                       alpha = 1, beta = 1,
     #                       attacker_budget=A_BUDGET,defender_budget=D_BUDGET,
     #                       attacker_valuation=B,defender_valuation=D,
     #                       max_iters = 30)
 
-    data_actual_seq = pd.read_csv("data/actual_sequential_A_(0.01, 1, 0.01).csv")
-    data_quad = pd.read_csv("data/algorithm1_quad_A_(0.01, 1, 0.01).csv")
-    # data_quad_int = pd.read_csv("data/algorithm1_quad_int_A_(0.01, 1, 0.01).csv")
-    data_greedy = pd.read_csv("data/greedy_A_(0.01, 1, 0.01).csv")
+    # data_actual_seq = pd.read_csv("data/actual_sequential_A_(0.01, 1, 0.01).csv")
+    # data_quad = pd.read_csv("data/algorithm1_quad_A_(0.01, 1, 0.01).csv")
+    # # data_quad_int = pd.read_csv("data/algorithm1_quad_int_A_(0.01, 1, 0.01).csv")
+    # data_greedy = pd.read_csv("data/greedy_A_(0.01, 1, 0.01).csv")
 
     plotter_function(datasets=[data_actual_seq, data_greedy, data_quad],
                      names=['actual_sequential', 'greedy', 'algorithm1_quad'],
-                     varying_param="A", save_path="plots/actual+greedy+quad_A.png")
+                     varying_param=VARYING_PARAM, 
+                     save_path=f"plots/actual+greedy+quad_{VARYING_PARAM}.png")

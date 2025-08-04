@@ -56,7 +56,7 @@ def algorithm1(**kwargs):
         - "Attacker's Gains"       : float
     """
     n_targets = kwargs.get("n_targets")
-    max_iters = kwargs.get("max_iters",30)
+    max_iters = kwargs.get("max_iters",50)
     defender_ftype = kwargs.get("defender_ftype")
 
     # Parameters
@@ -66,7 +66,7 @@ def algorithm1(**kwargs):
     attacker_valuation = kwargs.get("attacker_valuation")
     alpha, beta, A = kwargs.get("alpha"), kwargs.get("beta"), kwargs.get("A")
     # Reading simulation data for defender's loss
-    loss_data = pd.read_csv(f"data/dLoss_simulation_lhs100_({alpha},{beta},{A}).csv")
+    loss_data = pd.read_csv(f"data/simulations/dLoss_simulation_lhs100_({alpha},{beta},{A}).csv")
 
     # Define defender's utility instance
     defender_utility = UtilityFunction(function_type=defender_ftype, entity="defender",
@@ -107,7 +107,7 @@ def algorithm1(**kwargs):
                     savepath=f"models/itermodels/dLoss_iter{iteration}_({alpha},{beta},{A}).json")
         logging.info("Model updated and saved!")
         iteration+=1 # Update iteration
-    loss_data.to_csv(f"data/dLoss_updated_lhs100_({alpha},{beta},{A}).csv")
+    loss_data.to_csv(f"data/updated/dLoss_updated_lhs100_({alpha},{beta},{A}).csv")
     logging.info("Updated data saved!")
     logging.info("Terminated after %s iterations.", iteration-1)
 
