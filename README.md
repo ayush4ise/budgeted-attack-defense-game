@@ -123,10 +123,9 @@
 ## To Do
 
 - Try different estimators, preferably differentiable ones, so that the solver can optimize the model. [SVM, ANN maybe, etc.]
-- Make plots, by varying alpha, beta, A values in the probability success function.
 - Also make random allocation method, and compare results with the iterative algorithm.
-- Do train-test splits for the regression models and calculate the R-squared value.
 - Better convergence criteria for the iterative algorithm.
+- For each estimator, calculate train-test R-squared value and make plots by varying alpha, beta, A values.
 
 ## Estimators
 
