@@ -95,7 +95,7 @@
 
 ## Date - 03 August 2025
 
-- We run simulations to collect data for the defender's losses using the [`dLoss_simulation.py`](`dLoss_simulation.py`) script by varying the parameter 'A'. This is done so that when we run `algorithm1` for plotting, we use the data with appropriate values of 'A' every time.
+- We run simulations to collect data for the defender's losses using the [`dLoss_simulation.py`](`dLoss_simulation.py`) script by varying the parameters alpha, beta and A. This is done so that when we run `algorithm1` for plotting, we use the data with appropriate values of the parameters every time.
 
 - The results of the simulations are stored in the `data` folder, with filenames indicating the parameter values used.
 
