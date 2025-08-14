@@ -24,40 +24,41 @@ B = np.array([20, 100, 50, 2, 20]) # Infrastructure 6-10 valuations from multipl
 # infrastructure model from the paper
 D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
 
-# To store calculated values
-combined_values = []
+for A in np.round(np.arange(0.01,1,0.01),2):
+    # To store calculated values
+    combined_values = []
 
-# # Generate a (N_SAMPLES * N_TARGETS) size array with random numbers
-# allocations = np.random.rand(N_SAMPLES, N_TARGETS)
+    # # Generate a (N_SAMPLES * N_TARGETS) size array with random numbers
+    # allocations = np.random.rand(N_SAMPLES, N_TARGETS)
 
-# Latin Hypercube Sampling (LHS) to generate a (N_SAMPLES * N_TARGETS) size array
-# Inspired from: https://pydoe3.readthedocs.io/en/latest/randomized.html#randomized
-allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin', random_state=0)
+    # Latin Hypercube Sampling (LHS) to generate a (N_SAMPLES * N_TARGETS) size array
+    # Inspired from: https://pydoe3.readthedocs.io/en/latest/randomized.html#randomized
+    allocations = lhs(N_TARGETS, samples=N_SAMPLES, criterion='maximin', random_state=0)
 
-for allocation in allocations:
-    T = allocation
-    # Getting a random array of attacker allocations, T, with sum = T_BUDGET
-    T = T_BUDGET * T / sum(T)
+    for allocation in allocations:
+        T = allocation
+        # Getting a random array of attacker allocations, T, with sum = T_BUDGET
+        T = T_BUDGET * T / sum(T)
 
-    G = defender_lingo_model(
-        n_targets=N_TARGETS,
-        alpha=alpha,
-        beta=beta,
-        A=A,
-        g_budget=G_BUDGET,
-        D_list=D,
-        T_list=T
-    )
+        G = defender_lingo_model(
+            n_targets=N_TARGETS,
+            alpha=alpha,
+            beta=beta,
+            A=A,
+            g_budget=G_BUDGET,
+            D_list=D,
+            T_list=T
+        )
 
-    utility = np.dot(B, [prob_success(Ti=Ti,Gi=Gi, alpha=alpha, beta=beta, Ai=A) for Ti,Gi in zip(T,G)])
-    print('Z_t:', utility)
+        utility = np.dot(B, [prob_success(Ti=Ti,Gi=Gi, alpha=alpha, beta=beta, Ai=A) for Ti,Gi in zip(T,G)])
+        print('Z_t:', utility)
 
-    combined_values.append(list(T) + list(G) + [utility])
+        combined_values.append(list(T) + list(G) + [utility])
 
-# Create column names
-column_names = [f'T{i}' for i in range(1,N_TARGETS+1)] + [f'G_best{i}' for i in range(1,N_TARGETS+1)] + ['Z_T']
+    # Create column names
+    column_names = [f'T{i}' for i in range(1,N_TARGETS+1)] + [f'G_best{i}' for i in range(1,N_TARGETS+1)] + ['Z_T']
 
-# Create a dataframe
-df = pd.DataFrame(combined_values, columns=column_names)
-# df.to_csv(f'data/aGain_simulation_random{N_SAMPLES}.csv', index=False)
-df.to_csv(f'data/simulations/aGain_simulation_lhs{N_SAMPLES}_({alpha},{beta},{A}).csv', index=False)
+    # Create a dataframe
+    df = pd.DataFrame(combined_values, columns=column_names)
+    # df.to_csv(f'data/aGain_simulation_random{N_SAMPLES}.csv', index=False)
+    df.to_csv(f'data/simulations/aGain_simulation_lhs{N_SAMPLES}_({alpha},{beta},{A}).csv', index=False)

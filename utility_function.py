@@ -18,7 +18,7 @@ class UtilityFunction():
         Such as - n_targets, alpha, beta, A, b_list, d_list, t_budget, g_budget
 
         function_type : str
-            The type of utility function we're using - ['quadratic','quadratic_int']
+            The type of utility function we're using - ['quadratic','quadratic_int','quadratic_sees']
 
         entity : str
             The type of entity - ['attacker', 'defender']
@@ -81,10 +81,27 @@ class UtilityFunction():
                 }
             self.model = coefficients
 
+        if self.function_type == 'quadratic_sees':
+            # Extracting X and y for regression
+            # X - both allocations
+            X_1 = np.array(data[data.columns[:2*self.n_targets]])   # Degree 1 features
+            X_2 = X_1**2                                # Get quadratic features
+            y = data[data.columns[-1]]                  # Gains/Losses
+            X = np.hstack([X_1, X_2])                   # Final input with quadratic features
+
+            model = LinearRegression()                  # Fitting a regression model
+            model.fit(X,y)
+
+            coefficients = {
+                'intercept' : round(model.intercept_,2),
+                'coefficients' : [round(coef,2) for coef in model.coef_]
+                }
+            self.model = coefficients
+
         if savepath:
             self.save_model(savepath)
 
-    def utility_function(self, allocations, modelpath):
+    def utility_function(self, allocations, modelpath=None):
         """
         Using the model coefficients to return the utility value
 
@@ -119,6 +136,16 @@ class UtilityFunction():
             for i in range(self.n_targets):
                 for j in range(self.n_targets - i):
                     utility += coeffs.pop(0) * allocations[i] * allocations[i+j] # Degree 2 terms
+            return utility
+
+        if self.function_type == "quadratic_sees":
+            utility = self.model['intercept']
+            for i in range(self.n_targets):
+                utility += self.model['coefficients'][i] * allocations[i] # Adding the Xi term
+                # Adding the Xi^2 term
+                utility += self.model['coefficients'][i+2*len(allocations)] * allocations[i] * allocations[i]
+                # The terms having opponent's allocations will be constant, hence
+                # we do not add them to the utility function
             return utility
         return None
 

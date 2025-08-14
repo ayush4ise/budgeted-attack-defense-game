@@ -105,11 +105,19 @@
 
 - We plot the results of the iterative algorithm and greedy method using the [`plot_generator.py`](`plot_generator.py`) script. The plots are saved in the `plots` folder.
 
+## Date - 13 August 2025
+
+- We run simulations to collect data for the attacker's gains using the [`aGain_simulation.py`](`aGain_simulation.py`) script by varying the parameters alpha, beta and A. This is done for the same reason as the defender's losses. Data stored in the `data` folder.
+
+- We implement different cases for the problem based on available information for the attacker and defender. The cases are described in the [Cases](#cases) section below. Algorithm described in the [Algorithms](#algorithms) section below.
+
+- We add the **quadratic_sees** utility function to the `UtilityFunction` class, which is a quadratic utility function that also has the opponent's allocations as an input parameter. While it has no direct impact during optimizing the utility function (because no interaction terms), it is used to have different coefficients for the attacker's utility function when the defender's allocations are known.
+
 ## Algorithms
 
 ### Algorithm 1 - Iterative Model Updation
 
-```markdown
+```latex
 1. [Redundant] Initialize attacker and defender allocations a, d
 2. While not converged:
 3.         d* = argmin defender's estimated utility function
@@ -120,12 +128,45 @@
 8. Return (a*, d*)
 ```
 
+### Case 1, Case 2, Case 4
+
+In these cases, both the attacker and defender optimize their utility functions independently as their own optimization problems. The attacker might know the defender's allocations, which can be incorporated into the attacker's utility function, hence leaving the attacker with a function of only the attacker's allocations.
+
+```latex
+1. Initialize attacker and defender utility functions, f(d), g(a)
+2. d* = argmin f(d)
+3. a* = argmax g(a) // If attacker knows defender's allocations, g(a) = g(a, d*)
+4. Calculate losses: l = CSF(d*, a*)
+5. Calculate gains: g = CSF(a*, d*)
+6. Return (a*, d*, l, g)
+```
+
+## Cases
+
+| Case | Defender | Attacker|
+|----------|----------|---------|
+| 1 | Does not know the utility function | Does not know the utility function |
+| 2 | Does not know the utility function | Does not know the utility function, but knows defender's allocations |
+| 3 | Does not know the utility function | Knows the utility function |
+| 4 | Does not know the utility function | Knows the utility function and defender's allocations |
+| 5 | Does not know the utility function | Knows the utility function and defender's allocations, but does not know the parameters |
+
 ## To Do
 
-- Try different estimators, preferably differentiable ones, so that the solver can optimize the model. [SVM, ANN maybe, etc.]
+Priority:
+
+- Implement a utility function using splines for the `UtilityFunction` class.
+- Skip the iterative algorithm for now, and optimize fitted utility functions once for the given parameters.
+- Try out the cases from the [Cases](#cases) section above.
+- Read about policy gradient and knowledge gradient methods.
+- How are policy gradient approaches used in Stackleberg games (Since, my understanding of the state and actions makes it unclear how to use policy gradient methods in this case)?
+- Check out the EGO (Efficient Global Optimization) algorithm for optimization paper (Also, Gaussian Stochastic Process Model).
+
+Not priority:
+
+- For each estimator, calculate train-test R-squared value and make plots by varying alpha, beta, A values.
 - Also make random allocation method, and compare results with the iterative algorithm.
 - Better convergence criteria for the iterative algorithm.
-- For each estimator, calculate train-test R-squared value and make plots by varying alpha, beta, A values.
 
 ## Estimators
 
@@ -138,19 +179,21 @@ The following estimators are currently supported in the `UtilityFunction` class:
 
 The following abbreviations are used in defining some of the models, data files and variables:
 
-- T: Attacker's allocations
-- G: Defender's allocations
-- B: Attacker's budget
-- D: Defender's budget
-- alpha: Defender's influence parameter in the success probability function. Range (0,1]
-- beta: Attacker's influence parameter in the success probability function. Range (0,1]
-- A: Inherent defense level of the targets. Range (0,1]
-- lhs100: Latin Hypercube Sampling with 100 samples
-- dLoss: Defender's Loss
-- aGain: Attacker's Gain
-- (1,1,0.1): Parameters for the utility functions, where 1 is the alpha value, 1 is the beta value, and 0.1 is the A value.
-- qni: Quadratic Non-Interactive
-- random20: Random sampling of 20 data points
+| Abbreviation | Description |
+|--------------|-------------|
+| T            | Attacker's allocations |
+| G            | Defender's allocations |
+| B            | Attacker's valuations |
+| D            | Defender's valuations |
+| alpha        | Defender's influence parameter in the success probability function. Range (0,1] |
+| beta         | Attacker's influence parameter in the success probability function. Range (0,1] |
+| A            | Inherent defense level of the targets. Range (0,1] |
+| lhs100       | Latin Hypercube Sampling with 100 samples |
+| dLoss        | Defender's Loss |
+| aGain        | Attacker's Gain |
+| (1,1,0.1)    | Parameters for the utility functions, where 1 is the alpha value, 1 is the beta value, and 0.1 is the A value. |
+| qni          | Quadratic Non-Interactive |
+| random20     | Random sampling of 20 data points |
 
 ## Results
 
@@ -177,10 +220,15 @@ The following abbreviations are used in defining some of the models, data files 
 
 ## Doubts/Suggestions
 
+- Since splines are peacewise polynomials, how to optimize the utility function using splines?
 - Should the random allocation method be completely random for the given parameter value for plotting?
 - What exactly should be the range of the parameter A?
 - Effect of valuations on estimated utility functions (and results) can be studied.
 - Effect of budget too can be studied.
+
+## Note
+
+- Do not try to add 'actual' utility function to the `UtilityFunction` class, as it needs more input parameters than the functions in the rest of the class. It is better to use the LINGO models from `utils.py` to get the actual utility function values.
 
 ## References
 
