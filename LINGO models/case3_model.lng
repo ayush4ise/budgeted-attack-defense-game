@@ -1,0 +1,76 @@
+MODEL:
+
+DATA:
+N_TARGETS = @POINTER(1);
+N_COEFFS = @POINTER(2);
+ENDDATA
+
+SETS:
+TARGETS /1..N_TARGETS/: T, G, P, mu_t, mu_g, dZdT, dZdG, B, D;
+COEFFS /1..N_COEFFS/: coefficients;
+ENDSETS
+
+! Parameters;
+DATA:
+alpha = @POINTER(3);
+beta = @POINTER(4);
+A = @POINTER(5);
+
+! Attacker and defender valuations;
+B = @POINTER(6);
+D = @POINTER(7);
+
+! Attacker and defender budgets;
+T_budget = @POINTER(8);
+G_budget = @POINTER(9);
+
+! Defender utility function coefficients;
+coefficients = @POINTER(10);
+ENDDATA
+
+! Success probability;
+@FOR(TARGETS(i):
+    P(i) = beta * T(i) / (beta * T(i) + alpha * G(i) + A);
+);
+
+! Derivatives of objective functions;
+@FOR(TARGETS(i):
+    dZdT(i) = B(i) * ( (beta*(alpha*G(i) + A)) / ( (beta*T(i) + alpha*G(i) + A)^2 ) );
+    !dZdG(i) = D(i) * ( (beta*alpha*T(i)) / ( (beta*T(i) + alpha*G(i) + A)^2 ) );
+    dZdG(i) = coefficients(i) + 2 * coefficients(i + N_TARGETS) * G(i));
+
+! KKT stationarity conditions;
+@FOR(TARGETS(i):
+    dZdT(i) - lambda_t - mu_t(i) = 0;
+    dZdG(i) - lambda_g - mu_g(i) = 0;
+);
+
+! Budget constraints;
+@SUM(TARGETS(i): T(i)) = T_budget;
+@SUM(TARGETS(i): G(i)) = G_budget;
+
+! Complementary slackness;
+@FOR(TARGETS(i):
+    mu_t(i) * T(i) = 0;
+    mu_g(i) * G(i) = 0;
+);
+
+! Non-negativity;
+@FOR(TARGETS(i):
+    T(i) >= 0;
+    G(i) >= 0;
+    mu_t(i) >= 0;
+    mu_g(i) >= 0;
+);
+
+! Free multipliers;
+!@FREE lambda_t; 
+!@FREE lambda_g;
+! Results;
+DATA:
+@POINTER(11) = T;
+@POINTER(12) = G;
+@POINTER(13) = @STATUS();
+ENDDATA
+
+END

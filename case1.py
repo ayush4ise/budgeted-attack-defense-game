@@ -10,7 +10,7 @@ from utility_function import UtilityFunction
 from utils import attacker_lingo_model, prob_success
 
 # Setting up logging
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s: %(levelname)s %(message)s',
                     datefmt='%d/%m/%Y %I:%M:%S %p',
                     handlers=[logging.FileHandler('logs/case1.log'), logging.StreamHandler()])
@@ -97,8 +97,6 @@ if __name__ == '__main__':
 
     B = np.array([20, 100, 50, 2, 20]) # Attacker's valuations
     D = np.array([70, 1000, 50, 75, 150]) # Defender's valuations
-
-    MAX_ITERS = 30
 
     DEFENDER_FTYPE = "quadratic"
     ATTACKER_FTYPE = "quadratic"

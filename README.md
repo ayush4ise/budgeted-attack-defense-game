@@ -113,6 +113,17 @@
 
 - We add the **quadratic_sees** utility function to the `UtilityFunction` class, which is a quadratic utility function that also has the opponent's allocations as an input parameter. While it has no direct impact during optimizing the utility function (because no interaction terms), it is used to have different coefficients for the attacker's utility function when the defender's allocations are known.
 
+## Date - 17 August 2025
+
+- We implement the cases described in the [Cases](#cases) section. The algorithm used is described in the [Algorithms](#algorithms) section below. We skip the iterative algirithm for now, and optimize the utility functions once for the given parameters. The case scripts are:
+  - [`case1.py`](case1.py)
+  - [`case2.py`](case2.py)
+  - [`case4.py`](case4.py)
+
+- A LINGO model for Case 3 is implemented in [`LINGO models/case3_model.lng`](LINGO%20models/case3_model.lng). The model is not used to generate results, as the optimal solution for the problem is not achieved using the LINGO solver. The reason is described in the [Note](#note) section.
+
+- Plots are generated for the results of the cases.
+
 ## Algorithms
 
 ### Algorithm 1 - Iterative Model Updation
@@ -174,6 +185,7 @@ The following estimators are currently supported in the `UtilityFunction` class:
 
 - **Quadratic**: Quadratic utility function, with no interactions between allocations.
 - **Quadratic with Interactions**: Quadratic utility function, with interactions between allocations.
+- **Quadratic Sees**: Quadratic utility function, with no interactions and also has the opponent's allocations as an input parameter.
 
 ## Abbreviations
 
@@ -220,6 +232,7 @@ The following abbreviations are used in defining some of the models, data files 
 
 ## Doubts/Suggestions
 
+- For Case 5, we're running simulations to collect data for the defender's losses with the assumption that the attacker knows all the information (CSF, parameters, defender allocations), so we cannot fit a defender model and then take the case that the attacker does not know the CSF parameters.
 - Since splines are peacewise polynomials, how to optimize the utility function using splines?
 - Should the random allocation method be completely random for the given parameter value for plotting?
 - What exactly should be the range of the parameter A?
@@ -229,6 +242,8 @@ The following abbreviations are used in defining some of the models, data files 
 ## Note
 
 - Do not try to add 'actual' utility function to the `UtilityFunction` class, as it needs more input parameters than the functions in the rest of the class. It is better to use the LINGO models from `utils.py` to get the actual utility function values.
+
+- Case 3 should not be used, as the optimal solution for the problem is not achieved using the LINGO solver. The problem is locally infeasible. The solver requires to be set on "global" or "multistart" mode to find the optimal solution, as suggested by the LINGO documentation. However, this is not implemented in the current version of the LINGO solver API. The "global" mode can not be invoked from the LINGO solver GUI either, as the current license does not support the required number of non-linear variables.
 
 ## References
 

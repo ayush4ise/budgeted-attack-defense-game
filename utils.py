@@ -239,7 +239,7 @@ def game_lingo_model(game_type, n_targets, alpha, beta, A, b_list, d_list, t_bud
     model.set_pointer("Pointer5", b_list,lingo.PARAM)
     model.set_pointer("Pointer6",d_list,lingo.PARAM)
     model.set_pointer("Pointer7",t_budget,lingo.PARAM)
-    model.set_pointer("Pointer8",g_budget,lingo.VAR)
+    model.set_pointer("Pointer8",g_budget,lingo.PARAM)
     model.set_pointer("Pointer9",T,lingo.VAR)
     model.set_pointer("Pointer10",G,lingo.VAR)
     model.set_pointer("Pointer11",STATUS,lingo.VAR)

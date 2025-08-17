@@ -2,3 +2,4 @@ __pycache__
 models/itermodels
 data/simulations
 data/updated
+logs

@@ -64,8 +64,8 @@ def case2(**kwargs):
         # Define attacker's utility instance
         attacker_utility = UtilityFunction(function_type=attacker_ftype, entity="attacker",
                                             n_targets=n_targets, t_budget=attacker_budget)
-        attacker_utility.estimate_function(data=gain_data,
-                                           savepath=f"models/aGain_qnisees_lhs100_({alpha},{beta},{A}).json")
+        attacker_utility.estimate_function(data=gain_data)
+        # savepath=f"models/aGain_qnisees_lhs100_({alpha},{beta},{A}).json")
 
         # Solve for optimal defender's allocation
         a_star = attacker_utility.optimize()
