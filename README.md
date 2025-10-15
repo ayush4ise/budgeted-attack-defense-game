@@ -124,6 +124,12 @@
 
 - Plots are generated for the results of the cases.
 
+## Date - 15 October 2025
+
+- We implement the Efficient Global Optimization (EGO) algorithm using the [`Surrogate Modeling Tool`](https://smt.readthedocs.io/en/latest/index.html) library. The implementation is in [`ego_2targets.py`](ego_2targets.py) for a simple case of 2 targets.
+- It is difficult to implement it for more than 2 targets, as it'll be difficult to define the design space for the EGO algorithm. The design space is defined by the bounds on the allocations, which are defined by the budget constraints. For 2 targets, the design space is a 2D space, which can be easily defined. For more than 2 targets, the design space becomes a high-dimensional space, which is difficult to define and visualize.
+- The plot for the 2-target case is available in [`plots/ego_2targets.png`](plots/ego_2targets.png).
+
 ## Algorithms
 
 ### Algorithm 1 - Iterative Model Updation
@@ -166,17 +172,12 @@ In these cases, both the attacker and defender optimize their utility functions 
 
 Priority:
 
-- Implement a utility function using splines for the `UtilityFunction` class.
-- Skip the iterative algorithm for now, and optimize fitted utility functions once for the given parameters.
-- Try out the cases from the [Cases](#cases) section above.
-- Read about policy gradient and knowledge gradient methods.
-- How are policy gradient approaches used in Stackleberg games (Since, my understanding of the state and actions makes it unclear how to use policy gradient methods in this case)?
 - Check out the EGO (Efficient Global Optimization) algorithm for optimization paper (Also, Gaussian Stochastic Process Model).
 
 Not priority:
 
 - For each estimator, calculate train-test R-squared value and make plots by varying alpha, beta, A values.
-- Also make random allocation method, and compare results with the iterative algorithm.
+- Also make random allocation method, to compare results.
 - Better convergence criteria for the iterative algorithm.
 
 ## Estimators
@@ -232,8 +233,6 @@ The following abbreviations are used in defining some of the models, data files 
 
 ## Doubts/Suggestions
 
-- For Case 5, we're running simulations to collect data for the defender's losses with the assumption that the attacker knows all the information (CSF, parameters, defender allocations), so we cannot fit a defender model and then take the case that the attacker does not know the CSF parameters.
-- Since splines are peacewise polynomials, how to optimize the utility function using splines?
 - Should the random allocation method be completely random for the given parameter value for plotting?
 - What exactly should be the range of the parameter A?
 - Effect of valuations on estimated utility functions (and results) can be studied.
@@ -244,6 +243,8 @@ The following abbreviations are used in defining some of the models, data files 
 - Do not try to add 'actual' utility function to the `UtilityFunction` class, as it needs more input parameters than the functions in the rest of the class. It is better to use the LINGO models from `utils.py` to get the actual utility function values.
 
 - Case 3 should not be used, as the optimal solution for the problem is not achieved using the LINGO solver. The problem is locally infeasible. The solver requires to be set on "global" or "multistart" mode to find the optimal solution, as suggested by the LINGO documentation. However, this is not implemented in the current version of the LINGO solver API. The "global" mode can not be invoked from the LINGO solver GUI either, as the current license does not support the required number of non-linear variables.
+
+- Do not consider the 'Cases' for now. They are logically not very sound, and the results are not very useful.
 
 ## References
 
