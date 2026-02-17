@@ -80,13 +80,13 @@ def attacker_lingo_model(n_targets, alpha, beta, A, t_budget, B_list, G_list):
     # it needs to retrived from model
     STATUS, ptrType  = model.get_pointer("Pointer9")
 
-    # Check that the model has ben solved
-    if STATUS == lingo.LS_STATUS_GLOBAL_LNG:
-        print("\nGlobal optimum found!")
-    elif STATUS == lingo.LS_STATUS_LOCAL_LNG:
-        print("\nLocal optimum found!")
-    else:
-        print("\nSolution is non-optimal\n")
+    # # Check that the model has ben solved
+    # if STATUS == lingo.LS_STATUS_GLOBAL_LNG:
+    #     print("\nGlobal optimum found!")
+    # elif STATUS == lingo.LS_STATUS_LOCAL_LNG:
+    #     print("\nLocal optimum found!")
+    # else:
+    #     print("\nSolution is non-optimal\n")
 
     # # Display the results
     # print("T", T)
